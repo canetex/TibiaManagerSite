@@ -380,6 +380,136 @@ function sortTargettingList() {
 
 // Complexidade: O(1) - Setup de drag and drop
 function setupZerobotDragAndDrop() {
-    // Será implementado para copiar profiles entre arquivos
-    // Mantendo sincronização entre list, profileKeys, profileModifiers, profileNames
+    // Event listeners para drag and drop de profiles
+    document.addEventListener('dragstart', handleZerobotDragStart);
+    document.addEventListener('dragover', handleZerobotDragOver);
+    document.addEventListener('drop', handleZerobotDrop);
+    document.addEventListener('dragend', handleZerobotDragEnd);
+}
+
+// Complexidade: O(1) - Início do drag
+function handleZerobotDragStart(e) {
+    if (!e.target.classList.contains('profile-item')) return;
+    
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', JSON.stringify({
+        profileIndex: parseInt(e.target.dataset.profileIndex),
+        section: e.target.dataset.section,
+        fileIndex: parseInt(e.target.dataset.fileIndex)
+    }));
+}
+
+// Complexidade: O(1) - Drag over
+function handleZerobotDragOver(e) {
+    if (!e.target.closest('.profile-item') && !e.target.closest('.drag-drop-zone-profile')) return;
+    
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    
+    const dropZone = e.target.closest('.drag-drop-zone-profile') || e.target.closest('.profile-list-dual');
+    if (dropZone) {
+        dropZone.classList.add('drag-over');
+    }
+}
+
+// Complexidade: O(n) - Drop
+function handleZerobotDrop(e) {
+    e.preventDefault();
+    
+    const dropZone = e.target.closest('.drag-drop-zone-profile') || e.target.closest('.profile-list-dual');
+    if (!dropZone) return;
+    
+    const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+    if (!dragData) return;
+    
+    const targetFileIndex = parseInt(dropZone.dataset.targetFileIndex || dropZone.closest('.file-panel')?.id === 'zerobotFilePanel2' ? 1 : 0);
+    
+    // Copiar profile mantendo sincronização
+    copyZerobotProfile(dragData.fileIndex, targetFileIndex, dragData.section, dragData.profileIndex);
+    
+    // Limpar classes
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+}
+
+// Complexidade: O(1) - Fim do drag
+function handleZerobotDragEnd(e) {
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+}
+
+// Complexidade: O(n) - Copiar profile mantendo sincronização
+function copyZerobotProfile(sourceFileIndex, targetFileIndex, sectionName, profileIndex) {
+    const sourceData = zerobotFilesData[sourceFileIndex];
+    const targetData = zerobotFilesData[targetFileIndex];
+    
+    if (!sourceData || !targetData) return;
+    
+    const sourceSection = sourceData[sectionName];
+    if (!sourceSection) return;
+    
+    const listKey = sectionName === 'targeting' ? 'list' : 
+                   (sectionName === 'equipment' ? 'equipmentList' : 
+                   (sectionName === 'healing' ? 'healingList' : 'list'));
+    
+    const sourceList = sourceSection[listKey] || [];
+    const sourceProfileKeys = sourceSection.profileKeys || [];
+    const sourceProfileModifiers = sourceSection.profileModifiers || [];
+    const sourceProfileNames = sourceSection.profileNames || [];
+    
+    // Verificar se o profile existe
+    if (profileIndex >= sourceList.length || 
+        profileIndex >= sourceProfileKeys.length ||
+        profileIndex >= sourceProfileModifiers.length ||
+        profileIndex >= sourceProfileNames.length) {
+        showNotification('Profile não encontrado', 'error');
+        return;
+    }
+    
+    // Verificar limite de profiles (máximo 10)
+    const targetSection = targetData[sectionName] || {};
+    const targetList = targetSection[listKey] || [];
+    if (targetList.length >= 10) {
+        showNotification('Limite de 10 profiles atingido', 'error');
+        return;
+    }
+    
+    // Inicializar seções no target se não existirem
+    if (!targetData[sectionName]) {
+        targetData[sectionName] = {};
+    }
+    if (!targetData[sectionName][listKey]) {
+        targetData[sectionName][listKey] = [];
+    }
+    if (!targetData[sectionName].profileKeys) {
+        targetData[sectionName].profileKeys = [];
+    }
+    if (!targetData[sectionName].profileModifiers) {
+        targetData[sectionName].profileModifiers = [];
+    }
+    if (!targetData[sectionName].profileNames) {
+        targetData[sectionName].profileNames = [];
+    }
+    
+    // Copiar profile mantendo sincronização
+    const newProfileName = sourceProfileNames[profileIndex] || `Profile ${targetList.length + 1}`;
+    let finalName = newProfileName;
+    let counter = 1;
+    
+    // Verificar se o nome já existe e adicionar sufixo se necessário
+    while (targetData[sectionName].profileNames.includes(finalName)) {
+        finalName = `${newProfileName} (${counter})`;
+        counter++;
+    }
+    
+    // Adicionar ao target mantendo sincronização
+    targetData[sectionName][listKey].push(JSON.parse(JSON.stringify(sourceList[profileIndex])));
+    targetData[sectionName].profileKeys.push(sourceProfileKeys[profileIndex]);
+    targetData[sectionName].profileModifiers.push(sourceProfileModifiers[profileIndex]);
+    targetData[sectionName].profileNames.push(finalName);
+    
+    // Atualizar UI
+    renderZerobotDualFiles();
+    showNotification(`Profile "${finalName}" copiado com sucesso!`, 'success');
 }
