@@ -89,8 +89,19 @@ async function handleFileUpload(file, index) {
 
         updateFileUI(index, file.name);
         updateEditor();
+        
+        // Resetar o input file para permitir selecionar o mesmo arquivo novamente
+        const fileInput = document.getElementById(`fileInput${index + 1}`);
+        if (fileInput) {
+            fileInput.value = '';
+        }
     } catch (error) {
         alert('Erro ao processar arquivo JSON: ' + error.message);
+        // Resetar o input mesmo em caso de erro
+        const fileInput = document.getElementById(`fileInput${index + 1}`);
+        if (fileInput) {
+            fileInput.value = '';
+        }
     }
 }
 
@@ -114,7 +125,11 @@ function removeFile(index) {
 
     uploadArea.style.display = 'block';
     fileInfo.style.display = 'none';
-    fileInput.value = '';
+    
+    // Resetar o input file
+    if (fileInput) {
+        fileInput.value = '';
+    }
 
     updateEditor();
 }
