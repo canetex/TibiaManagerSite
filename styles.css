@@ -1077,6 +1077,16 @@ body {
     color: var(--tibia-gold);
 }
 
+.btn-icon.btn-danger {
+    color: #ff6b6b;
+}
+
+.btn-icon.btn-danger:hover {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff4444;
+}
+
 .profile-monsters {
     margin-top: 10px;
     padding: 10px;
