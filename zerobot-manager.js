@@ -751,31 +751,52 @@ function showTargettingMonsters(profileIndex, fileIndex) {
     const profile = data.targeting.list[profileIndex];
     if (!Array.isArray(profile)) return;
     
-    const monstersDiv = document.getElementById(`monsters-${fileIndex}-targeting-${profileIndex}`);
-    if (!monstersDiv) return;
+    const modal = document.getElementById('zerobotMonstersModal');
+    const modalTitle = document.getElementById('zerobotMonstersModalTitle');
+    const monstersList = document.getElementById('zerobotMonstersList');
+    const modalClose = document.getElementById('zerobotMonstersModalClose');
     
-    const monstersList = monstersDiv.querySelector('.monsters-list');
-    if (!monstersList) return;
+    if (!modal || !monstersList || !modalTitle) return;
     
-    if (monstersDiv.style.display === 'none') {
-        // Popular lista de monstros
-        monstersList.innerHTML = '';
-        const monsterNames = profile.map(item => item.name || 'Unknown').filter(Boolean);
-        
-        if (monsterNames.length === 0) {
-            monstersList.innerHTML = '<li>Nenhum monstro</li>';
-        } else {
-            monsterNames.forEach(name => {
-                const li = document.createElement('li');
-                li.textContent = name;
-                monstersList.appendChild(li);
-            });
-        }
-        
-        monstersDiv.style.display = 'block';
+    // Obter nome do profile
+    const profileName = data.targeting.profileNames?.[profileIndex] || `Profile ${profileIndex + 1}`;
+    modalTitle.textContent = `Lista de Monstros - ${profileName}`;
+    
+    // Popular lista de monstros
+    monstersList.innerHTML = '';
+    const monsterNames = profile.map(item => item.name || 'Unknown').filter(Boolean);
+    
+    if (monsterNames.length === 0) {
+        monstersList.innerHTML = '<li class="monster-item">Nenhum monstro</li>';
     } else {
-        monstersDiv.style.display = 'none';
+        monsterNames.forEach(name => {
+            const li = document.createElement('li');
+            li.className = 'monster-item';
+            li.textContent = name;
+            monstersList.appendChild(li);
+        });
     }
+    
+    // Mostrar modal
+    modal.classList.add('active');
+    
+    // Event listener para fechar
+    const closeModal = () => {
+        modal.classList.remove('active');
+    };
+    
+    if (modalClose) {
+        modalClose.onclick = closeModal;
+    }
+    
+    // Fechar ao clicar fora do modal
+    const handleClickOutside = (event) => {
+        if (event.target === modal) {
+            closeModal();
+            modal.removeEventListener('click', handleClickOutside);
+        }
+    };
+    modal.addEventListener('click', handleClickOutside);
 }
 
 // Complexidade: O(1) - Copiar conteúdo de um profile
