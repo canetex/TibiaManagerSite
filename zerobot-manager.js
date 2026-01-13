@@ -1,5 +1,8 @@
 // ==================== ZEROBOT MANAGER ====================
 
+// Variável global para armazenar profile copiado
+let copiedZerobotProfile = null;
+
 // Complexidade: O(1) - Inicialização simples
 function initializeZerobotManager() {
     setupZerobotUpload();
@@ -179,11 +182,16 @@ function renderTargettingProfiles(targeting, fileIndex) {
                 </div>
                 <div class="profile-buttons">
                     <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, 'targeting', ${fileIndex})">✏️</button>
+                    <button class="btn-icon" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button>
+                    <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, 'targeting', ${fileIndex})">📋</button>
+                    <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, 'targeting', ${fileIndex})">📄</button>
                     <button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>
                 </div>
             </div>
             <div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;">
-                <p class="monsters-list">${monsterNames || 'Nenhum monstro'}</p>
+                <div class="monsters-list-container">
+                    <ul class="monsters-list"></ul>
+                </div>
             </div>
         `;
         
@@ -237,6 +245,8 @@ function renderGenericProfiles(section, sectionName, containerId, fileIndex, lis
                 </div>
                 <div class="profile-buttons">
                     <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                    <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📋</button>
+                    <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📄</button>
                 </div>
             </div>
         `;
@@ -299,10 +309,13 @@ function renderDualProfileList(section, sectionName, container, fileIndex, listK
                 </div>
                 <div class="profile-buttons">
                     <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                    ${sectionName === 'targeting' ? `<button class="btn-icon" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button>` : ''}
+                    <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📋</button>
+                    <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📄</button>
                     ${sectionName === 'targeting' ? `<button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>` : ''}
                 </div>
             </div>
-            ${sectionName === 'targeting' ? `<div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;"><p class="monsters-list">${monsterNames || 'Nenhum monstro'}</p></div>` : ''}
+            ${sectionName === 'targeting' ? `<div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;"><div class="monsters-list-container"><ul class="monsters-list"></ul></div></div>` : ''}
         `;
         
         container.appendChild(profileItem);
@@ -360,13 +373,9 @@ function downloadZerobotFile(fileIndex) {
 // Complexidade: O(1) - Setup de ordenação
 function setupZerobotSorting() {
     const btnSortScripts = document.getElementById('btnSortScripts');
-    const btnSortTargetting = document.getElementById('btnSortTargetting');
-
+    // Removido btnSortTargetting - agora cada profile tem seu próprio botão
     if (btnSortScripts) {
         btnSortScripts.addEventListener('click', () => sortEnabledScripts());
-    }
-    if (btnSortTargetting) {
-        btnSortTargetting.addEventListener('click', () => sortTargettingList());
     }
 }
 
@@ -383,23 +392,19 @@ function sortEnabledScripts() {
     showNotification('Scripts ordenados alfabeticamente!', 'success');
 }
 
-// Complexidade: O(n*m log m) - Ordenação de targetting list
-function sortTargettingList() {
-    const fileIndex = zerobotFilesData.findIndex(f => f !== null);
-    if (fileIndex === -1) return;
-
+// Complexidade: O(m log m) - Ordenação de targetting list de um profile específico
+function sortTargettingProfileList(profileIndex, fileIndex) {
     const data = zerobotFilesData[fileIndex];
-    if (!data.targeting || !data.targeting.list) return;
+    if (!data || !data.targeting || !data.targeting.list) return;
 
-    // Ordenar cada list dentro de cada profile pelo campo "name"
-    data.targeting.list.forEach(profile => {
-        if (Array.isArray(profile)) {
-            profile.sort((a, b) => {
-                const nameA = (a.name || '').toLowerCase();
-                const nameB = (b.name || '').toLowerCase();
-                return nameA.localeCompare(nameB);
-            });
-        }
+    const profile = data.targeting.list[profileIndex];
+    if (!Array.isArray(profile)) return;
+
+    // Ordenar o profile pelo campo "name"
+    profile.sort((a, b) => {
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
+        return nameA.localeCompare(nameB);
     });
 
     // Atualizar UI
@@ -410,7 +415,7 @@ function sortTargettingList() {
         renderZerobotDualFiles();
     }
     
-    showNotification('Targetting list ordenado alfabeticamente!', 'success');
+    showNotification('Lista ordenada alfabeticamente!', 'success');
 }
 
 // Complexidade: O(1) - Setup de drag and drop
@@ -727,7 +732,7 @@ function renameZerobotProfile(profileIndex, sectionName, fileIndex) {
     showNotification('Profile renomeado com sucesso!', 'success');
 }
 
-// Complexidade: O(1) - Mostrar monstros do targetting profile
+// Complexidade: O(n) - Mostrar monstros do targetting profile
 function showTargettingMonsters(profileIndex, fileIndex) {
     const data = zerobotFilesData[fileIndex];
     if (!data || !data.targeting || !data.targeting.list) return;
@@ -738,11 +743,103 @@ function showTargettingMonsters(profileIndex, fileIndex) {
     const monstersDiv = document.getElementById(`monsters-${fileIndex}-targeting-${profileIndex}`);
     if (!monstersDiv) return;
     
+    const monstersList = monstersDiv.querySelector('.monsters-list');
+    if (!monstersList) return;
+    
     if (monstersDiv.style.display === 'none') {
+        // Popular lista de monstros
+        monstersList.innerHTML = '';
         const monsterNames = profile.map(item => item.name || 'Unknown').filter(Boolean);
-        monstersDiv.querySelector('.monsters-list').textContent = monsterNames.length > 0 ? monsterNames.join(', ') : 'Nenhum monstro';
+        
+        if (monsterNames.length === 0) {
+            monstersList.innerHTML = '<li>Nenhum monstro</li>';
+        } else {
+            monsterNames.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                monstersList.appendChild(li);
+            });
+        }
+        
         monstersDiv.style.display = 'block';
     } else {
         monstersDiv.style.display = 'none';
     }
+}
+
+// Complexidade: O(1) - Copiar conteúdo de um profile
+function copyZerobotProfileContent(profileIndex, sectionName, fileIndex) {
+    const data = zerobotFilesData[fileIndex];
+    if (!data || !data[sectionName]) return;
+    
+    const listKey = sectionName === 'targeting' ? 'list' : 
+                   (sectionName === 'equipment' ? 'equipmentList' : 
+                   (sectionName === 'healing' ? 'healingList' : 'list'));
+    
+    const section = data[sectionName];
+    const list = section[listKey] || [];
+    
+    if (profileIndex >= list.length) return;
+    
+    // Copiar conteúdo do profile (apenas a lista, não as chaves/modificadores/nomes)
+    copiedZerobotProfile = {
+        content: JSON.parse(JSON.stringify(list[profileIndex])),
+        section: sectionName,
+        fileIndex: fileIndex,
+        profileIndex: profileIndex
+    };
+    
+    showNotification('Profile copiado! Use o botão Colar em outro profile para subscrever.', 'success');
+}
+
+// Complexidade: O(1) - Colar conteúdo de um profile em outro
+function pasteZerobotProfileContent(profileIndex, sectionName, fileIndex) {
+    if (!copiedZerobotProfile) {
+        showNotification('Nenhum profile copiado!', 'error');
+        return;
+    }
+    
+    if (copiedZerobotProfile.section !== sectionName) {
+        showNotification('Apenas profiles da mesma seção podem ser colados!', 'error');
+        return;
+    }
+    
+    const data = zerobotFilesData[fileIndex];
+    if (!data || !data[sectionName]) return;
+    
+    const listKey = sectionName === 'targeting' ? 'list' : 
+                   (sectionName === 'equipment' ? 'equipmentList' : 
+                   (sectionName === 'healing' ? 'healingList' : 'list'));
+    
+    const section = data[sectionName];
+    const list = section[listKey] || [];
+    
+    if (profileIndex >= list.length) return;
+    
+    // Confirmar subscrever
+    const profileName = section.profileNames?.[profileIndex] || `Profile ${profileIndex + 1}`;
+    if (!confirm(`Deseja subscrever o conteúdo do "${profileName}"?`)) {
+        return;
+    }
+    
+    // Subscrever conteúdo
+    list[profileIndex] = JSON.parse(JSON.stringify(copiedZerobotProfile.content));
+    
+    // Atualizar UI
+    const fileCount = zerobotFilesData.filter(f => f !== null).length;
+    if (fileCount === 1) {
+        if (sectionName === 'targeting') {
+            renderTargettingProfiles(data.targeting, fileIndex);
+        } else if (sectionName === 'magicShooter') {
+            renderMagicShooterProfiles(data.magicShooter, fileIndex);
+        } else if (sectionName === 'equipment') {
+            renderEquipmentProfiles(data.equipment, fileIndex);
+        } else if (sectionName === 'healing') {
+            renderHealingProfiles(data.healing, fileIndex);
+        }
+    } else {
+        renderZerobotDualFiles();
+    }
+    
+    showNotification(`Profile "${profileName}" subscrevido com sucesso!`, 'success');
 }

@@ -1085,11 +1085,22 @@ body {
     border: 1px solid var(--tibia-border);
 }
 
+.monsters-list-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 .monsters-list {
     color: var(--tibia-text-secondary);
     font-size: 0.9em;
-    line-height: 1.5;
+    line-height: 1.8;
     margin: 0;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.monsters-list li {
+    margin-bottom: 5px;
 }
 
 .profile-actions-dual {
