@@ -861,9 +861,22 @@ function initializeTabs() {
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
 
+    if (tabButtons.length === 0 || tabContents.length === 0) {
+        console.error('Tabs não encontradas');
+        return;
+    }
+
     tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const targetTab = button.dataset.tab;
+            
+            if (!targetTab) {
+                console.error('Tab sem data-tab attribute');
+                return;
+            }
 
             // Remove active class de todos
             tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -871,7 +884,13 @@ function initializeTabs() {
 
             // Adiciona active class ao selecionado
             button.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
+            
+            const targetElement = document.getElementById(targetTab);
+            if (targetElement) {
+                targetElement.classList.add('active');
+            } else {
+                console.error(`Elemento com ID "${targetTab}" não encontrado`);
+            }
         });
     });
 }
