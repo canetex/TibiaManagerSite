@@ -876,9 +876,9 @@ function initializeTabs() {
     });
 }
 
-// ==================== CHAR CONFIGURATOR ====================
+// ==================== PRICE FIXER ====================
 
-// Estado da aplicação para Char Configurator
+// Estado da aplicação para Price Fixer
 let charFileData = null;
 let defaultItemPrices = null;
 
@@ -1033,16 +1033,28 @@ function downloadCharFile() {
         return;
     }
 
-    const jsonString = JSON.stringify(charFileData.data, null, 4);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'itemprices.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showNotification('Download iniciado!', 'success');
+    try {
+        const jsonString = JSON.stringify(charFileData.data, null, 4);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'itemprices.json';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        
+        // Forçar o download
+        setTimeout(() => {
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }, 10);
+        
+        showNotification('Download iniciado!', 'success');
+    } catch (error) {
+        console.error('Erro ao fazer download:', error);
+        showNotification('Erro ao fazer download: ' + error.message, 'error');
+    }
 }
