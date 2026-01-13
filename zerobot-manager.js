@@ -181,17 +181,18 @@ function renderTargettingProfiles(targeting, fileIndex) {
                     <span class="profile-count">${itemCount} itens</span>
                 </div>
                 <div class="profile-buttons">
-                    <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, 'targeting', ${fileIndex})">✏️</button>
-                    <button class="btn-icon" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button>
-                    <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, 'targeting', ${fileIndex})">📋</button>
-                    <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, 'targeting', ${fileIndex})">📄</button>
-                    <button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>
-                    <button class="btn-icon btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, 'targeting', ${fileIndex})">🗑️</button>
-                </div>
-            </div>
-            <div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;">
-                <div class="monsters-list-container">
-                    <ul class="monsters-list"></ul>
+                    <div class="profile-buttons-row profile-buttons-row-large">
+                        <button class="btn-icon btn-icon-large" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button>
+                    </div>
+                    <div class="profile-buttons-row profile-buttons-row-medium">
+                        <button class="btn-icon btn-icon-medium" title="Renomear" onclick="renameZerobotProfile(${i}, 'targeting', ${fileIndex})">✏️</button>
+                        <button class="btn-icon btn-icon-medium btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, 'targeting', ${fileIndex})">🗑️</button>
+                    </div>
+                    <div class="profile-buttons-row">
+                        <button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>
+                        <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, 'targeting', ${fileIndex})">📋</button>
+                        <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, 'targeting', ${fileIndex})">📄</button>
+                    </div>
                 </div>
             </div>
         `;
@@ -245,10 +246,14 @@ function renderGenericProfiles(section, sectionName, containerId, fileIndex, lis
                     <span class="profile-count">${itemCount} itens</span>
                 </div>
                 <div class="profile-buttons">
-                    <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
-                    <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📋</button>
-                    <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📄</button>
-                    <button class="btn-icon btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, '${sectionName}', ${fileIndex})">🗑️</button>
+                    <div class="profile-buttons-row profile-buttons-row-medium">
+                        <button class="btn-icon btn-icon-medium" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                        <button class="btn-icon btn-icon-medium btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, '${sectionName}', ${fileIndex})">🗑️</button>
+                    </div>
+                    <div class="profile-buttons-row">
+                        <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📋</button>
+                        <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📄</button>
+                    </div>
                 </div>
             </div>
         `;
@@ -310,15 +315,18 @@ function renderDualProfileList(section, sectionName, container, fileIndex, listK
                     <span class="profile-count">${itemCount} itens</span>
                 </div>
                 <div class="profile-buttons">
-                    <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
-                    ${sectionName === 'targeting' ? `<button class="btn-icon" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button>` : ''}
-                    <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📋</button>
-                    <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📄</button>
-                    ${sectionName === 'targeting' ? `<button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>` : ''}
-                    <button class="btn-icon btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, '${sectionName}', ${fileIndex})">🗑️</button>
+                    ${sectionName === 'targeting' ? `<div class="profile-buttons-row profile-buttons-row-large"><button class="btn-icon btn-icon-large" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button></div>` : ''}
+                    <div class="profile-buttons-row profile-buttons-row-medium">
+                        <button class="btn-icon btn-icon-medium" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                        <button class="btn-icon btn-icon-medium btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, '${sectionName}', ${fileIndex})">🗑️</button>
+                    </div>
+                    <div class="profile-buttons-row">
+                        ${sectionName === 'targeting' ? `<button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>` : ''}
+                        <button class="btn-icon" title="Copiar Profile" onclick="copyZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📋</button>
+                        <button class="btn-icon" title="Colar Profile" onclick="pasteZerobotProfileContent(${i}, '${sectionName}', ${fileIndex})">📄</button>
+                    </div>
                 </div>
             </div>
-            ${sectionName === 'targeting' ? `<div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;"><div class="monsters-list-container"><ul class="monsters-list"></ul></div></div>` : ''}
         `;
         
         container.appendChild(profileItem);

@@ -1057,7 +1057,25 @@ body {
 
 .profile-buttons {
     display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.profile-buttons-row {
+    display: flex;
     gap: 5px;
+    justify-content: flex-end;
+}
+
+.profile-buttons-row-large {
+    width: 100%;
+    justify-content: center;
+}
+
+.profile-buttons-row-medium {
+    width: 100%;
+    justify-content: center;
 }
 
 .btn-icon {
@@ -1111,6 +1129,39 @@ body {
 
 .monsters-list li {
     margin-bottom: 5px;
+}
+
+.modal-large {
+    max-width: 90%;
+    max-height: 90vh;
+    width: 800px;
+}
+
+.monsters-list-full {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.monster-item {
+    background: var(--tibia-bg-dark);
+    border: 1px solid var(--tibia-border);
+    border-radius: 4px;
+    padding: 10px 15px;
+    color: var(--tibia-text);
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+}
+
+.monster-item:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
 }
 
 .profile-actions-dual {
