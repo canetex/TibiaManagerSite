@@ -24,6 +24,9 @@
             <button class="tab-button" data-tab="price-fixer">
                 Price Fixer
             </button>
+            <button class="tab-button" data-tab="zerobot-manager">
+                ZeroBot Manager
+            </button>
         </nav>
 
         <main class="main-content">
@@ -274,6 +277,166 @@
                     </section>
                 </div>
             </div>
+
+            <!-- ZeroBot Manager Tab -->
+            <div class="tab-content" id="zerobot-manager">
+                <div class="zerobot-container">
+                    <div class="info-box">
+                        <p class="info-text">
+                            📁 Faça upload de até 2 arquivos <code>char.json</code> do ZeroBot para gerenciar e organizar suas configurações.
+                        </p>
+                    </div>
+
+                    <!-- Upload Section -->
+                    <section class="upload-section">
+                        <h2 class="section-title">Upload de Arquivos</h2>
+                        <div class="upload-container">
+                            <div class="upload-box" id="zerobotUploadBox1" data-file-index="0">
+                                <div class="upload-area" id="zerobotUploadArea1">
+                                    <div class="upload-icon">📄</div>
+                                    <p class="upload-text">Arquivo 1</p>
+                                    <p class="upload-hint">Clique ou arraste o JSON aqui</p>
+                                    <input type="file" id="zerobotFileInput1" accept=".json" class="file-input">
+                                </div>
+                                <div class="file-info" id="zerobotFileInfo1" style="display: none;">
+                                    <span class="file-name" id="zerobotFileName1"></span>
+                                    <button class="btn-remove" id="removeZerobotFile1">✕</button>
+                                </div>
+                            </div>
+
+                            <div class="upload-box" id="zerobotUploadBox2" data-file-index="1">
+                                <div class="upload-area" id="zerobotUploadArea2">
+                                    <div class="upload-icon">📄</div>
+                                    <p class="upload-text">Arquivo 2 (Opcional)</p>
+                                    <p class="upload-hint">Clique ou arraste o JSON aqui</p>
+                                    <input type="file" id="zerobotFileInput2" accept=".json" class="file-input">
+                                </div>
+                                <div class="file-info" id="zerobotFileInfo2" style="display: none;">
+                                    <span class="file-name" id="zerobotFileName2"></span>
+                                    <button class="btn-remove" id="removeZerobotFile2">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Editor Sections -->
+                    <div class="zerobot-editor-container" id="zerobotEditorContainer" style="display: none;">
+                        <!-- Single File Editor -->
+                        <div class="zerobot-single-editor" id="zerobotSingleEditor">
+                            <section class="editor-section">
+                                <h2 class="section-title">Enabled Scripts</h2>
+                                <div class="zerobot-scripts-container">
+                                    <p class="info-text">Organize os scripts habilitados em ordem alfabética</p>
+                                    <div class="script-list" id="enabledScriptsList"></div>
+                                    <button class="btn btn-secondary" id="btnSortScripts">🔤 Ordenar Alfabeticamente</button>
+                                </div>
+                            </section>
+
+                            <section class="editor-section">
+                                <h2 class="section-title">Targetting Profiles</h2>
+                                <div class="zerobot-profiles-container">
+                                    <p class="info-text">Os profiles são sincronizados: list, profileKeys, profileModifiers e profileNames trabalham juntos</p>
+                                    <div class="profile-list" id="targettingProfilesList"></div>
+                                    <button class="btn btn-secondary" id="btnSortTargetting">🔤 Ordenar Alfabeticamente</button>
+                                </div>
+                            </section>
+
+                            <section class="editor-section">
+                                <h2 class="section-title">Magic Shooter Profiles</h2>
+                                <div class="zerobot-profiles-container">
+                                    <div class="profile-list" id="magicShooterProfilesList"></div>
+                                </div>
+                            </section>
+
+                            <section class="editor-section">
+                                <h2 class="section-title">Equipment Profiles</h2>
+                                <div class="zerobot-profiles-container">
+                                    <div class="profile-list" id="equipmentProfilesList"></div>
+                                </div>
+                            </section>
+
+                            <section class="editor-section">
+                                <h2 class="section-title">Healing Profiles</h2>
+                                <div class="zerobot-profiles-container">
+                                    <div class="profile-list" id="healingProfilesList"></div>
+                                </div>
+                            </section>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-success" id="btnDownloadZerobot">💾 Download JSON</button>
+                                <button class="btn btn-danger" id="btnResetZerobot">🔄 Resetar</button>
+                            </div>
+                        </div>
+
+                        <!-- Dual File Editor -->
+                        <div class="zerobot-dual-editor" id="zerobotDualEditor" style="display: none;">
+                            <div class="dual-editor-grid">
+                                <div class="file-panel" id="zerobotFilePanel1">
+                                    <h3 class="panel-title">Arquivo 1</h3>
+                                    <div class="zerobot-sections-container">
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Enabled Scripts</h4>
+                                            <div class="drag-drop-zone" id="dragZone1Scripts" data-source="0" data-target="1" data-type="scripts">
+                                                <div class="drag-icon">⬇️</div>
+                                                <p>Arraste para Arquivo 2</p>
+                                                <p class="drag-label">Copiar Enabled Scripts</p>
+                                            </div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Targetting Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotTargettingList1"></div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Magic Shooter Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotMagicShooterList1"></div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Equipment Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotEquipmentList1"></div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Healing Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotHealingList1"></div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success btn-block" id="btnDownloadZerobot1">💾 Download Arquivo 1</button>
+                                </div>
+
+                                <div class="file-panel" id="zerobotFilePanel2">
+                                    <h3 class="panel-title">Arquivo 2</h3>
+                                    <div class="zerobot-sections-container">
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Enabled Scripts</h4>
+                                            <div class="drag-drop-zone" id="dragZone2Scripts" data-source="1" data-target="0" data-type="scripts">
+                                                <div class="drag-icon">⬇️</div>
+                                                <p>Arraste para Arquivo 1</p>
+                                                <p class="drag-label">Copiar Enabled Scripts</p>
+                                            </div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Targetting Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotTargettingList2"></div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Magic Shooter Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotMagicShooterList2"></div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Equipment Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotEquipmentList2"></div>
+                                        </div>
+                                        <div class="zerobot-section">
+                                            <h4 class="section-subtitle">Healing Profiles</h4>
+                                            <div class="profile-list-dual" id="zerobotHealingList2"></div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success btn-block" id="btnDownloadZerobot2">💾 Download Arquivo 2</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -302,5 +465,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="zerobot-manager.js"></script>
 </body>
 </html>

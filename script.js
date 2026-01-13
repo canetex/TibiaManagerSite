@@ -25,6 +25,9 @@ let currentFileIndex = 0;
 let charFileData = null;
 let defaultItemPrices = null;
 
+// Estado da aplicação para ZeroBot Manager
+let zerobotFilesData = [null, null];
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
@@ -33,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeModal();
     initializeCharConfigurator();
     loadDefaultItemPrices();
+    initializeZerobotManager();
 });
 
 // Complexidade: O(1) - Event listeners simples
