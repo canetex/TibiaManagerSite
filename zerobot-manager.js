@@ -123,7 +123,7 @@ function renderZerobotSingleFile(fileIndex) {
 
 // Complexidade: O(n) - Renderização de dois arquivos
 function renderZerobotDualFiles() {
-    renderZerobotDualSection('enabledScripts', 'Scripts', 'dragZone1Scripts', 'dragZone2Scripts');
+    // Enabled Scripts já está renderizado no HTML via drag-drop-zone
     renderZerobotDualProfiles('targeting', 'Targetting', 'zerobotTargettingList1', 'zerobotTargettingList2');
     renderZerobotDualProfiles('magicShooter', 'Magic Shooter', 'zerobotMagicShooterList1', 'zerobotMagicShooterList2');
     renderZerobotDualProfiles('equipment', 'Equipment', 'zerobotEquipmentList1', 'zerobotEquipmentList2');
