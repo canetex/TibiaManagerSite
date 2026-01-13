@@ -1,0 +1,742 @@
+/* Reset e Variáveis */
+:root {
+    --tibia-dark: #1a1a1a;
+    --tibia-darker: #0f0f0f;
+    --tibia-gold: #d4af37;
+    --tibia-gold-dark: #b8941f;
+    --tibia-red: #8b0000;
+    --tibia-red-dark: #5a0000;
+    --tibia-green: #228b22;
+    --tibia-blue: #4169e1;
+    --tibia-border: #3a3a3a;
+    --tibia-text: #e0e0e0;
+    --tibia-text-dim: #a0a0a0;
+    --tibia-bg-card: #252525;
+    --tibia-shadow: rgba(0, 0, 0, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--tibia-darker) 0%, var(--tibia-dark) 100%);
+    color: var(--tibia-text);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: var(--tibia-bg-card);
+    border-radius: 10px;
+    border: 2px solid var(--tibia-border);
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+.title {
+    font-size: 2.5em;
+    color: var(--tibia-gold);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.tibia-icon {
+    font-size: 1.2em;
+    filter: drop-shadow(0 0 5px var(--tibia-gold));
+}
+
+.subtitle {
+    color: var(--tibia-text-dim);
+    font-size: 1.1em;
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--tibia-gold);
+    border-radius: 5px;
+}
+
+.info-text {
+    color: var(--tibia-text);
+    font-size: 0.95em;
+}
+
+.info-text strong {
+    color: var(--tibia-gold);
+}
+
+/* Upload Section */
+.upload-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    color: var(--tibia-gold);
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.upload-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.upload-box {
+    position: relative;
+}
+
+.upload-area {
+    border: 3px dashed var(--tibia-border);
+    border-radius: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    background: var(--tibia-bg-card);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+.upload-area.dragover {
+    border-color: var(--tibia-green);
+    background: rgba(34, 139, 34, 0.1);
+}
+
+.upload-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+.upload-text {
+    font-size: 1.2em;
+    color: var(--tibia-text);
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.upload-hint {
+    color: var(--tibia-text-dim);
+    font-size: 0.9em;
+}
+
+.file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-gold);
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.file-name {
+    color: var(--tibia-gold);
+    font-weight: bold;
+    flex: 1;
+}
+
+.btn-remove {
+    background: var(--tibia-red);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background 0.3s ease;
+}
+
+.btn-remove:hover {
+    background: var(--tibia-red-dark);
+}
+
+/* Editor Sections */
+.editor-container {
+    margin-top: 30px;
+}
+
+.editor-section {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+/* Hotkey Sets */
+.profile-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-list-dual {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    min-height: 100px;
+    padding: 15px;
+    background: var(--tibia-dark);
+    border: 2px dashed var(--tibia-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.profile-list-dual.dragover {
+    border-color: var(--tibia-green);
+    background: rgba(34, 139, 34, 0.1);
+}
+
+.profile-item-dual {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: grab;
+    user-select: none;
+}
+
+.profile-item-dual:hover {
+    border-color: var(--tibia-gold);
+    transform: translateX(5px);
+    box-shadow: 0 2px 10px var(--tibia-shadow);
+}
+
+.profile-item-dual:active {
+    cursor: grabbing;
+}
+
+.drag-hint {
+    color: var(--tibia-text-dim);
+    font-size: 0.9em;
+}
+
+.profiles-subtitle {
+    color: var(--tibia-gold);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.profiles-section {
+    margin-bottom: 25px;
+}
+
+.channels-section-dual {
+    margin-bottom: 25px;
+}
+
+.empty-profiles {
+    color: var(--tibia-text-dim);
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+.profile-item {
+    background: var(--tibia-dark);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-item:hover {
+    border-color: var(--tibia-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 10px var(--tibia-shadow);
+}
+
+.profile-item.selected {
+    border-color: var(--tibia-green);
+    background: rgba(34, 139, 34, 0.1);
+}
+
+.profile-name {
+    color: var(--tibia-text);
+    font-weight: bold;
+    flex: 1;
+}
+
+.btn-delete-profile {
+    background: var(--tibia-red);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.3s ease;
+}
+
+.btn-delete-profile:hover {
+    background: var(--tibia-red-dark);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: var(--tibia-gold);
+    color: var(--tibia-dark);
+}
+
+.btn-primary:hover {
+    background: var(--tibia-gold-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+}
+
+.btn-secondary {
+    background: var(--tibia-border);
+    color: var(--tibia-text);
+}
+
+.btn-secondary:hover {
+    background: #4a4a4a;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: var(--tibia-green);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #1e7e1e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(34, 139, 34, 0.4);
+}
+
+.btn-danger {
+    background: var(--tibia-red);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--tibia-red-dark);
+    transform: translateY(-2px);
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Chat Settings */
+.chat-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 15px;
+    background: var(--tibia-dark);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.checkbox-input {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    accent-color: var(--tibia-gold);
+}
+
+.checkbox-text {
+    font-size: 1.1em;
+    color: var(--tibia-text);
+    font-weight: 500;
+}
+
+/* Channels */
+.channels-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.channel-item {
+    background: var(--tibia-dark);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.channel-item:hover {
+    border-color: var(--tibia-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 10px var(--tibia-shadow);
+}
+
+.channel-item.active {
+    border-color: var(--tibia-green);
+    background: rgba(34, 139, 34, 0.1);
+}
+
+.channel-info {
+    flex: 1;
+}
+
+.channel-name {
+    color: var(--tibia-text);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.channel-id {
+    color: var(--tibia-text-dim);
+    font-size: 0.9em;
+}
+
+.channel-toggle {
+    width: 50px;
+    height: 26px;
+    background: var(--tibia-border);
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.channel-toggle.active {
+    background: var(--tibia-green);
+}
+
+.channel-toggle::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s ease;
+}
+
+.channel-toggle.active::after {
+    transform: translateX(24px);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+/* Dual File Editor */
+.dual-file-editor {
+    margin-top: 30px;
+}
+
+.dual-editor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.file-panel {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+.panel-title {
+    color: var(--tibia-gold);
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.drag-source-container {
+    margin-bottom: 20px;
+}
+
+.drag-drop-zone {
+    border: 3px dashed var(--tibia-border);
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 15px;
+    background: var(--tibia-dark);
+    transition: all 0.3s ease;
+    cursor: grab;
+    user-select: none;
+}
+
+.drag-drop-zone:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--tibia-shadow);
+}
+
+.drag-drop-zone.dragover {
+    border-color: var(--tibia-green);
+    background: rgba(34, 139, 34, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(34, 139, 34, 0.5);
+}
+
+.drag-drop-zone:active {
+    cursor: grabbing;
+}
+
+.drag-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.drag-drop-zone p {
+    color: var(--tibia-text);
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.drag-label {
+    color: var(--tibia-gold) !important;
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--tibia-bg-card);
+    border: 3px solid var(--tibia-gold);
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 10px 40px var(--tibia-shadow);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2em;
+    color: var(--tibia-text-dim);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--tibia-text);
+}
+
+.modal-title {
+    color: var(--tibia-gold);
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.modal-body {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    color: var(--tibia-text);
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 12px;
+    background: var(--tibia-dark);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    color: var(--tibia-text);
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--tibia-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    z-index: 2000;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+    max-width: 400px;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: var(--tibia-green);
+    border: 2px solid #1e7e1e;
+}
+
+.notification-error {
+    background: var(--tibia-red);
+    border: 2px solid var(--tibia-red-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.8em;
+    }
+
+    .upload-container {
+        grid-template-columns: 1fr;
+    }
+
+    .dual-editor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-list {
+        grid-template-columns: 1fr;
+    }
+
+    .channels-container {
+        grid-template-columns: 1fr;
+    }
+
+    .notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+
+    .notification.show {
+        transform: translateY(0);
+    }
+}

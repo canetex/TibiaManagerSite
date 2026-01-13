@@ -1,0 +1,19 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos de backup
+*.bak
+*.tmp
+*~
+
+# Arquivos de configuração local
+.env
+.env.local
+
+# Logs
+*.log
+
+# Arquivos grandes de exemplo (opcional)
+# clientoptions.json

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibia Client Options Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">
+                <span class="tibia-icon">⚔️</span>
+                Tibia Client Options Editor
+            </h1>
+            <p class="subtitle">Editor de configurações do cliente Tibia</p>
+            <div class="info-box">
+                <p class="info-text">
+                    📁 Para obter o arquivo, busque na pasta: <strong>{Pasta Tibia}/conf/clientoptions.json</strong>
+                </p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2 class="section-title">Upload de Arquivos</h2>
+                <div class="upload-container">
+                    <div class="upload-box" id="uploadBox1" data-file-index="0">
+                        <div class="upload-area" id="uploadArea1">
+                            <div class="upload-icon">📄</div>
+                            <p class="upload-text">Arquivo 1</p>
+                            <p class="upload-hint">Clique ou arraste o JSON aqui</p>
+                            <input type="file" id="fileInput1" accept=".json" class="file-input">
+                        </div>
+                        <div class="file-info" id="fileInfo1" style="display: none;">
+                            <span class="file-name" id="fileName1"></span>
+                            <button class="btn-remove" id="removeFile1">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="upload-box" id="uploadBox2" data-file-index="1">
+                        <div class="upload-area" id="uploadArea2">
+                            <div class="upload-icon">📄</div>
+                            <p class="upload-text">Arquivo 2 (Opcional)</p>
+                            <p class="upload-hint">Clique ou arraste o JSON aqui</p>
+                            <input type="file" id="fileInput2" accept=".json" class="file-input">
+                        </div>
+                        <div class="file-info" id="fileInfo2" style="display: none;">
+                            <span class="file-name" id="fileName2"></span>
+                            <button class="btn-remove" id="removeFile2">✕</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Editor Sections -->
+            <div class="editor-container" id="editorContainer" style="display: none;">
+                <!-- Single File Editor -->
+                <div class="single-file-editor" id="singleFileEditor">
+                    <section class="editor-section">
+                        <h2 class="section-title">Hotkeys e Actions Bars</h2>
+                        <div class="hotkey-controls">
+                            <div class="profile-list" id="profileList"></div>
+                            <div class="profile-actions">
+                                <button class="btn btn-secondary" id="btnCopyProfile">📋 Copiar Perfil</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="editor-section">
+                        <h2 class="section-title">Configurações de Chat</h2>
+                        <div class="chat-settings">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="chatEnabled" class="checkbox-input">
+                                <span class="checkbox-text">Chat Habilitado</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="npcMessagesEnabled" class="checkbox-input">
+                                <span class="checkbox-text">Mensagens de NPC Habilitadas</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="editor-section">
+                        <h2 class="section-title">Canais Abertos</h2>
+                        <div class="channels-container" id="channelsContainer"></div>
+                    </section>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-success" id="btnDownload">💾 Download JSON</button>
+                        <button class="btn btn-danger" id="btnReset">🔄 Resetar</button>
+                    </div>
+                </div>
+
+                <!-- Dual File Editor -->
+                <div class="dual-file-editor" id="dualFileEditor" style="display: none;">
+                    <div class="dual-editor-grid">
+                        <div class="file-panel" id="filePanel1">
+                            <h3 class="panel-title">Arquivo 1</h3>
+                            <div class="profiles-section">
+                                <h4 class="profiles-subtitle">Perfis (Arraste para Arquivo 2)</h4>
+                                <div class="profile-list-dual" id="profileList1"></div>
+                            </div>
+                            <div class="channels-section-dual">
+                                <h4 class="profiles-subtitle">Canais</h4>
+                                <div class="drag-drop-zone" id="dragZone1Channels" data-source="0" data-target="1" data-type="channels">
+                                    <div class="drag-icon">⬇️</div>
+                                    <p>Arraste para Arquivo 2</p>
+                                    <p class="drag-label">Copiar OpenChannels</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-block" id="btnDownload1">💾 Download Arquivo 1</button>
+                        </div>
+
+                        <div class="file-panel" id="filePanel2">
+                            <h3 class="panel-title">Arquivo 2</h3>
+                            <div class="profiles-section">
+                                <h4 class="profiles-subtitle">Perfis (Arraste para Arquivo 1)</h4>
+                                <div class="profile-list-dual" id="profileList2"></div>
+                            </div>
+                            <div class="channels-section-dual">
+                                <h4 class="profiles-subtitle">Canais</h4>
+                                <div class="drag-drop-zone" id="dragZone2Channels" data-source="1" data-target="0" data-type="channels">
+                                    <div class="drag-icon">⬇️</div>
+                                    <p>Arraste para Arquivo 1</p>
+                                    <p class="drag-label">Copiar OpenChannels</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-block" id="btnDownload2">💾 Download Arquivo 2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para criar/copiar perfil -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <h3 class="modal-title" id="modalTitle">Copiar Perfil</h3>
+            <div class="modal-body">
+                <label class="form-label">
+                    Nome do Perfil:
+                    <input type="text" id="profileNameInput" class="form-input" placeholder="Digite o nome do perfil">
+                </label>
+                <div id="copyProfileSelect" style="display: none;">
+                    <label class="form-label">
+                        Copiar de:
+                        <select id="copyFromSelect" class="form-select"></select>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="btnConfirmProfile">Confirmar</button>
+                <button class="btn btn-secondary" id="btnCancelProfile">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
