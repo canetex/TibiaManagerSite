@@ -224,16 +224,17 @@
                         <h2 class="section-title">📖 Instruções</h2>
                         <div class="instructions-content">
                             <div class="instruction-step">
-                                <h3 class="step-title">Step 1: Qual arquivo devo editar?</h3>
+                                <p><strong>Infelizmente cada personagem no tíbia possui sua própria lista de preços, para isso, precisaremos seguir alguns passos:</strong></p>
+                                <h3 class="step-title">Step 1: Escolher o arquivo a Editado</h3>
                                 <ol class="step-list">
                                     <li>No cliente do Tibia, no personagem escolhido, vá em <strong>Cyclopedia → Items</strong> e configure um preço customizado em qualquer item. Isso garante que o arquivo <code>itemsprices.json</code> associado a este personagem seja o mais recentemente atualizado.</li>
                                     <li>Abra o diretório de screenshots do Tibia. Você pode fazer isso pelo cliente do Tibia via <strong>Settings → Misc. → Screenshots → Open Screenshot Folder</strong>.</li>
                                     <li>Suba um nível de diretório e entre no diretório <code>characterdata</code> (no mesmo nível dos diretórios screenshots e minimap).</li>
                                     <li>Encontre o diretório mais recentemente atualizado (ex: no Windows Explorer, você pode ordenar por "Date modified" em ordem decrescente) e entre nele.</li>
-                                    <li>O arquivo <code>itemsprices.json</code> nesta pasta é o que você quer! Crie um backup e então copie seu conteúdo para esta ferramenta.</li>
+                                    <li>O arquivo <code>itemsprices.json</code> nesta pasta é o que você quer!</li>
                                     <li>Feche o cliente do Tibia.</li>
-                                    <li>Salve o arquivo de saída.</li>
-                                    <li>Abra o cliente do Tibia novamente e aproveite os destaques dourados nas mensagens de loot para todos os itens que você selecionou!</li>
+                                    <li>Renomeie o arquivo como <code>itemsprices.json.BKP</code></li>
+                                    <li>Faça o upload do arquivo na próxima tela</li>
                                 </ol>
                             </div>
                         </div>
@@ -262,7 +263,10 @@
                     <section class="char-download-section" id="charDownloadSection" style="display: none;">
                         <h2 class="section-title">Step 3: Download do arquivo atualizado</h2>
                         <div class="char-download-container">
-                            <p class="download-info">Seu arquivo foi processado e mesclado com os preços customizados!</p>
+                            <p class="download-info"><strong>Seu arquivo foi processado e mesclado com os preços customizados!</strong></p>
+                            <ol class="step-list">
+                                <li>Faça o download e salve na mesma pasta que esta o arquivo de backup anterior com o nome <code>itemsprice.json</code></li>
+                            </ol>
                             <button class="btn btn-success btn-large" id="btnDownloadChar">
                                 💾 Download itemprices.json Atualizado
                             </button>
