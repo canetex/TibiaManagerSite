@@ -168,10 +168,22 @@ function renderTargettingProfiles(targeting, fileIndex) {
         const profileName = profileNames[i] || `Profile ${i + 1}`;
         const itemCount = Array.isArray(list[i]) ? list[i].length : 0;
         
+        // Obter lista de nomes de monstros
+        const monsterNames = Array.isArray(list[i]) ? list[i].map(item => item.name || 'Unknown').filter(Boolean).join(', ') : '';
+        
         profileItem.innerHTML = `
             <div class="profile-header">
-                <span class="profile-name">${profileName}</span>
-                <span class="profile-count">${itemCount} itens</span>
+                <div class="profile-info">
+                    <span class="profile-name" data-editable="true" data-profile-index="${i}" data-section="targeting" data-file-index="${fileIndex}">${profileName}</span>
+                    <span class="profile-count">${itemCount} itens</span>
+                </div>
+                <div class="profile-buttons">
+                    <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, 'targeting', ${fileIndex})">✏️</button>
+                    <button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>
+                </div>
+            </div>
+            <div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;">
+                <p class="monsters-list">${monsterNames || 'Nenhum monstro'}</p>
             </div>
         `;
         
@@ -219,8 +231,13 @@ function renderGenericProfiles(section, sectionName, containerId, fileIndex, lis
         
         profileItem.innerHTML = `
             <div class="profile-header">
-                <span class="profile-name">${profileName}</span>
-                <span class="profile-count">${itemCount} itens</span>
+                <div class="profile-info">
+                    <span class="profile-name" data-editable="true" data-profile-index="${i}" data-section="${sectionName}" data-file-index="${fileIndex}">${profileName}</span>
+                    <span class="profile-count">${itemCount} itens</span>
+                </div>
+                <div class="profile-buttons">
+                    <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                </div>
             </div>
         `;
         
@@ -270,11 +287,22 @@ function renderDualProfileList(section, sectionName, container, fileIndex, listK
         const profileName = profileNames[i] || `Profile ${i + 1}`;
         const itemCount = Array.isArray(list[i]) ? list[i].length : 0;
         
+        // Obter lista de nomes de monstros para targetting
+        const monsterNames = (sectionName === 'targeting' && Array.isArray(list[i])) ? 
+            list[i].map(item => item.name || 'Unknown').filter(Boolean).join(', ') : '';
+        
         profileItem.innerHTML = `
             <div class="profile-header">
-                <span class="profile-name">${profileName}</span>
-                <span class="profile-count">${itemCount} itens</span>
+                <div class="profile-info">
+                    <span class="profile-name" data-editable="true" data-profile-index="${i}" data-section="${sectionName}" data-file-index="${fileIndex}">${profileName}</span>
+                    <span class="profile-count">${itemCount} itens</span>
+                </div>
+                <div class="profile-buttons">
+                    <button class="btn-icon" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                    ${sectionName === 'targeting' ? `<button class="btn-icon" title="Ver Monstros" onclick="showTargettingMonsters(${i}, ${fileIndex})">👁️</button>` : ''}
+                </div>
             </div>
+            ${sectionName === 'targeting' ? `<div class="profile-monsters" id="monsters-${fileIndex}-targeting-${i}" style="display: none;"><p class="monsters-list">${monsterNames || 'Nenhum monstro'}</p></div>` : ''}
         `;
         
         container.appendChild(profileItem);
@@ -385,6 +413,17 @@ function setupZerobotDragAndDrop() {
     document.addEventListener('dragover', handleZerobotDragOver);
     document.addEventListener('drop', handleZerobotDrop);
     document.addEventListener('dragend', handleZerobotDragEnd);
+    
+    // Event listeners para botões de copiar/subscrever
+    document.addEventListener('click', (e) => {
+        if (e.target.dataset.action === 'copy' || e.target.dataset.action === 'replace') {
+            const action = e.target.dataset.action;
+            const section = e.target.dataset.section;
+            const source = parseInt(e.target.dataset.source);
+            const target = parseInt(e.target.dataset.target);
+            copyOrReplaceSection(action, section, source, target);
+        }
+    });
 }
 
 // Complexidade: O(1) - Início do drag
@@ -402,14 +441,19 @@ function handleZerobotDragStart(e) {
 
 // Complexidade: O(1) - Drag over
 function handleZerobotDragOver(e) {
-    if (!e.target.closest('.profile-item') && !e.target.closest('.drag-drop-zone-profile')) return;
+    const profileItem = e.target.closest('.profile-item');
+    const profileList = e.target.closest('.profile-list-dual') || e.target.closest('.profile-list');
+    
+    if (!profileItem && !profileList) return;
     
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
     
-    const dropZone = e.target.closest('.drag-drop-zone-profile') || e.target.closest('.profile-list-dual');
-    if (dropZone) {
-        dropZone.classList.add('drag-over');
+    if (profileList) {
+        profileList.classList.add('drag-over');
+    }
+    if (profileItem && profileItem !== e.target.closest('.dragging')) {
+        profileItem.classList.add('drag-over');
     }
 }
 
@@ -417,16 +461,31 @@ function handleZerobotDragOver(e) {
 function handleZerobotDrop(e) {
     e.preventDefault();
     
-    const dropZone = e.target.closest('.drag-drop-zone-profile') || e.target.closest('.profile-list-dual');
-    if (!dropZone) return;
+    const dragDataStr = e.dataTransfer.getData('text/plain');
+    if (!dragDataStr) return;
     
-    const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+    const dragData = JSON.parse(dragDataStr);
     if (!dragData) return;
     
-    const targetFileIndex = parseInt(dropZone.dataset.targetFileIndex || dropZone.closest('.file-panel')?.id === 'zerobotFilePanel2' ? 1 : 0);
+    const targetProfileItem = e.target.closest('.profile-item');
+    const targetList = e.target.closest('.profile-list-dual') || e.target.closest('.profile-list');
     
-    // Copiar profile mantendo sincronização
-    copyZerobotProfile(dragData.fileIndex, targetFileIndex, dragData.section, dragData.profileIndex);
+    if (!targetList) return;
+    
+    const targetFileIndex = parseInt(targetList.dataset.fileIndex !== undefined ? targetList.dataset.fileIndex : 
+                                     (targetList.closest('#zerobotFilePanel2') ? 1 : 0));
+    const targetSection = targetList.dataset.section || dragData.section;
+    
+    // Se soltou em outro profile, reordenar dentro do mesmo grupo
+    if (targetProfileItem && targetProfileItem.dataset.fileIndex == dragData.fileIndex && 
+        targetProfileItem.dataset.section === dragData.section) {
+        const targetIndex = parseInt(targetProfileItem.dataset.profileIndex);
+        reorderZerobotProfile(dragData.fileIndex, dragData.section, dragData.profileIndex, targetIndex);
+    } 
+    // Se soltou em lista diferente, copiar profile
+    else if (targetFileIndex !== dragData.fileIndex || targetSection !== dragData.section) {
+        copyZerobotProfile(dragData.fileIndex, targetFileIndex, dragData.section, dragData.profileIndex);
+    }
     
     // Limpar classes
     document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
@@ -512,4 +571,159 @@ function copyZerobotProfile(sourceFileIndex, targetFileIndex, sectionName, profi
     // Atualizar UI
     renderZerobotDualFiles();
     showNotification(`Profile "${finalName}" copiado com sucesso!`, 'success');
+}
+
+// Complexidade: O(n) - Reordenar profile dentro do mesmo grupo
+function reorderZerobotProfile(fileIndex, sectionName, fromIndex, toIndex) {
+    const data = zerobotFilesData[fileIndex];
+    if (!data || !data[sectionName]) return;
+    
+    const listKey = sectionName === 'targeting' ? 'list' : 
+                   (sectionName === 'equipment' ? 'equipmentList' : 
+                   (sectionName === 'healing' ? 'healingList' : 'list'));
+    
+    const section = data[sectionName];
+    const list = section[listKey] || [];
+    const profileKeys = section.profileKeys || [];
+    const profileModifiers = section.profileModifiers || [];
+    const profileNames = section.profileNames || [];
+    
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || 
+        fromIndex >= list.length || toIndex >= list.length) return;
+    
+    // Mover todos os elementos sincronizados
+    const moveArray = (arr, from, to) => {
+        const item = arr.splice(from, 1)[0];
+        arr.splice(to, 0, item);
+    };
+    
+    moveArray(list, fromIndex, toIndex);
+    moveArray(profileKeys, fromIndex, toIndex);
+    moveArray(profileModifiers, fromIndex, toIndex);
+    moveArray(profileNames, fromIndex, toIndex);
+    
+    // Atualizar UI
+    const fileCount = zerobotFilesData.filter(f => f !== null).length;
+    if (fileCount === 1) {
+        renderZerobotSingleFile(fileIndex);
+    } else {
+        renderZerobotDualFiles();
+    }
+    
+    showNotification('Profile reordenado com sucesso!', 'success');
+}
+
+// Complexidade: O(n) - Copiar ou subscrever seção inteira
+function copyOrReplaceSection(action, sectionName, sourceFileIndex, targetFileIndex) {
+    const sourceData = zerobotFilesData[sourceFileIndex];
+    const targetData = zerobotFilesData[targetFileIndex];
+    
+    if (!sourceData || !targetData || !sourceData[sectionName]) {
+        showNotification('Dados não encontrados', 'error');
+        return;
+    }
+    
+    const listKey = sectionName === 'targeting' ? 'list' : 
+                   (sectionName === 'equipment' ? 'equipmentList' : 
+                   (sectionName === 'healing' ? 'healingList' : 'list'));
+    
+    const sourceSection = sourceData[sectionName];
+    
+    if (action === 'replace') {
+        // Subscrever: substituir tudo
+        targetData[sectionName] = JSON.parse(JSON.stringify(sourceSection));
+        showNotification(`Seção ${sectionName} subscrevida com sucesso!`, 'success');
+    } else {
+        // Copiar: adicionar todos os profiles
+        if (!targetData[sectionName]) {
+            targetData[sectionName] = {};
+        }
+        
+        const targetList = targetData[sectionName][listKey] || [];
+        const sourceList = sourceSection[listKey] || [];
+        
+        // Verificar limite
+        if (targetList.length + sourceList.length > 10) {
+            showNotification('Limite de 10 profiles atingido', 'error');
+            return;
+        }
+        
+        // Copiar cada profile
+        sourceList.forEach((profile, index) => {
+            const profileName = sourceSection.profileNames[index] || `Profile ${targetList.length + 1}`;
+            let finalName = profileName;
+            let counter = 1;
+            
+            while (targetData[sectionName].profileNames?.includes(finalName)) {
+                finalName = `${profileName} (${counter})`;
+                counter++;
+            }
+            
+            if (!targetData[sectionName][listKey]) targetData[sectionName][listKey] = [];
+            if (!targetData[sectionName].profileKeys) targetData[sectionName].profileKeys = [];
+            if (!targetData[sectionName].profileModifiers) targetData[sectionName].profileModifiers = [];
+            if (!targetData[sectionName].profileNames) targetData[sectionName].profileNames = [];
+            
+            targetData[sectionName][listKey].push(JSON.parse(JSON.stringify(profile)));
+            targetData[sectionName].profileKeys.push(sourceSection.profileKeys[index]);
+            targetData[sectionName].profileModifiers.push(sourceSection.profileModifiers[index]);
+            targetData[sectionName].profileNames.push(finalName);
+        });
+        
+        showNotification(`Seção ${sectionName} copiada com sucesso!`, 'success');
+    }
+    
+    renderZerobotDualFiles();
+}
+
+// Complexidade: O(1) - Renomear profile
+function renameZerobotProfile(profileIndex, sectionName, fileIndex) {
+    const data = zerobotFilesData[fileIndex];
+    if (!data || !data[sectionName] || !data[sectionName].profileNames) return;
+    
+    const currentName = data[sectionName].profileNames[profileIndex] || `Profile ${profileIndex + 1}`;
+    const newName = prompt(`Renomear profile:`, currentName);
+    
+    if (!newName || newName.trim() === '') return;
+    
+    const trimmedName = newName.trim();
+    
+    // Verificar se o nome já existe
+    if (data[sectionName].profileNames.includes(trimmedName) && 
+        data[sectionName].profileNames.indexOf(trimmedName) !== profileIndex) {
+        showNotification('Nome já existe! Escolha outro nome.', 'error');
+        return;
+    }
+    
+    data[sectionName].profileNames[profileIndex] = trimmedName;
+    
+    // Atualizar UI
+    const fileCount = zerobotFilesData.filter(f => f !== null).length;
+    if (fileCount === 1) {
+        renderZerobotSingleFile(fileIndex);
+    } else {
+        renderZerobotDualFiles();
+    }
+    
+    showNotification('Profile renomeado com sucesso!', 'success');
+}
+
+// Complexidade: O(1) - Mostrar monstros do targetting profile
+function showTargettingMonsters(profileIndex, fileIndex) {
+    const data = zerobotFilesData[fileIndex];
+    if (!data || !data.targeting || !data.targeting.list) return;
+    
+    const profile = data.targeting.list[profileIndex];
+    if (!Array.isArray(profile)) return;
+    
+    const monstersDiv = document.getElementById(`monsters-${fileIndex}-targeting-${profileIndex}`);
+    if (!monstersDiv) return;
+    
+    if (monstersDiv.style.display === 'none') {
+        const monsterNames = profile.map(item => item.name || 'Unknown').filter(Boolean);
+        monstersDiv.querySelector('.monsters-list').textContent = monsterNames.length > 0 ? monsterNames.join(', ') : 'Nenhum monstro';
+        monstersDiv.style.display = 'block';
+    } else {
+        monstersDiv.style.display = 'none';
+    }
 }

@@ -1047,3 +1047,64 @@ body {
     background: rgba(212, 175, 55, 0.1);
     border-style: solid;
 }
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.profile-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-icon {
+    background: transparent;
+    border: 1px solid var(--tibia-border);
+    border-radius: 4px;
+    color: var(--tibia-text);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--tibia-gold);
+}
+
+.profile-monsters {
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--tibia-bg-dark);
+    border-radius: 4px;
+    border: 1px solid var(--tibia-border);
+}
+
+.monsters-list {
+    color: var(--tibia-text-secondary);
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.profile-actions-dual {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-small {
+    padding: 8px 15px;
+    font-size: 0.9em;
+}
+
+.profile-list-dual.drag-over,
+.profile-list.drag-over {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
