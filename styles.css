@@ -923,3 +923,127 @@ body {
         transform: translateY(0);
     }
 }
+
+/* ==================== ZEROBOT MANAGER ==================== */
+.zerobot-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.zerobot-editor-container {
+    margin-top: 30px;
+}
+
+.zerobot-single-editor,
+.zerobot-dual-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.zerobot-scripts-container,
+.zerobot-profiles-container {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.script-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.script-item {
+    background: var(--tibia-bg-dark);
+    border: 1px solid var(--tibia-border);
+    border-radius: 4px;
+    padding: 12px 15px;
+    color: var(--tibia-text);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.zerobot-sections-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.zerobot-section {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.section-subtitle {
+    color: var(--tibia-gold);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-item {
+    background: var(--tibia-bg-dark);
+    border: 2px solid var(--tibia-border);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: move;
+    transition: all 0.3s ease;
+}
+
+.profile-item:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateX(5px);
+}
+
+.profile-item.dragging {
+    opacity: 0.5;
+    border-color: var(--tibia-gold);
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-name {
+    color: var(--tibia-gold);
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.profile-count {
+    color: var(--tibia-text-secondary);
+    font-size: 0.9em;
+}
+
+.drag-drop-zone-profile {
+    background: var(--tibia-bg-dark);
+    border: 2px dashed var(--tibia-border);
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.drag-drop-zone-profile.drag-over {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.1);
+    border-style: solid;
+}
