@@ -905,10 +905,6 @@ function initializeTabs() {
 
 // ==================== PRICE FIXER ====================
 
-// Estado da aplicação para Price Fixer
-let charFileData = null;
-let defaultItemPrices = null;
-
 // Complexidade: O(1) - Carregamento de arquivo estático
 async function loadDefaultItemPrices() {
     try {
