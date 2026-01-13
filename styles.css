@@ -391,10 +391,50 @@ body {
 }
 
 /* Chat Settings */
-.chat-settings {
+.chat-settings,
+.action-bar-settings,
+.general-settings {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.select-setting {
+    margin-top: 15px;
+    padding: 15px;
+    background: var(--tibia-dark);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.select-setting:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.select-setting .form-label {
+    color: var(--tibia-text);
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.select-setting .form-select {
+    width: 100%;
+    padding: 12px;
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    color: var(--tibia-text);
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+.select-setting .form-select:focus {
+    outline: none;
+    border-color: var(--tibia-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
 .checkbox-label {

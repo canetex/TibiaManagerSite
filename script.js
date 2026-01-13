@@ -159,6 +159,12 @@ function renderSingleFileEditor() {
     // Render chat settings
     renderChatSettings(json);
 
+    // Render action bar settings
+    renderActionBarSettings(json);
+
+    // Render general settings
+    renderGeneralSettings(json);
+
     // Render channels
     renderChannels(json);
 }
@@ -233,6 +239,175 @@ function renderChatSettings(json) {
             filesData[currentFileIndex].data.options.NpcMessageseEnabled = e.target.checked;
         }
     });
+}
+
+// Complexidade: O(1) - Atualização simples
+function renderActionBarSettings(json) {
+    const options = json?.options || {};
+    
+    // Lock Action Bars (usa actionBarBottomLocked como referência principal)
+    const lockActionBars = document.getElementById('lockActionBars');
+    lockActionBars.checked = options.actionBarBottomLocked || false;
+    lockActionBars.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            const locked = e.target.checked;
+            filesData[currentFileIndex].data.options.actionBarBottomLocked = locked;
+            filesData[currentFileIndex].data.options.actionBarLeftLocked = locked;
+            filesData[currentFileIndex].data.options.actionBarRightLocked = locked;
+        }
+    };
+
+    // Show Action Bar 1 (usa actionBarShowBottom1)
+    const showActionBar1 = document.getElementById('showActionBar1');
+    showActionBar1.checked = options.actionBarShowBottom1 !== false;
+    showActionBar1.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionBarShowBottom1 = e.target.checked;
+        }
+    };
+
+    // Show Action Bar 2 (usa actionBarShowBottom2)
+    const showActionBar2 = document.getElementById('showActionBar2');
+    showActionBar2.checked = options.actionBarShowBottom2 !== false;
+    showActionBar2.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionBarShowBottom2 = e.target.checked;
+        }
+    };
+
+    // Show Amount
+    const showAmount = document.getElementById('showAmount');
+    showAmount.checked = options.actionButtonShowAmount !== false;
+    showAmount.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionButtonShowAmount = e.target.checked;
+        }
+    };
+
+    // Show Cooldown
+    const showCooldown = document.getElementById('showCooldown');
+    showCooldown.checked = options.actionButtonShowGraphicalCooldown !== false;
+    showCooldown.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionButtonShowGraphicalCooldown = e.target.checked;
+        }
+    };
+
+    // Show Cooldown Number
+    const showCooldownNumber = document.getElementById('showCooldownNumber');
+    showCooldownNumber.checked = options.actionButtonShowCooldownNumbers !== false;
+    showCooldownNumber.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionButtonShowCooldownNumbers = e.target.checked;
+        }
+    };
+
+    // Show Hotkey
+    const showHotkey = document.getElementById('showHotkey');
+    showHotkey.checked = options.actionButtonShowHotkey !== false;
+    showHotkey.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionButtonShowHotkey = e.target.checked;
+        }
+    };
+
+    // Show Spell Parameters
+    const showSpellParameters = document.getElementById('showSpellParameters');
+    showSpellParameters.checked = options.actionButtonShowSpellParameters !== false;
+    showSpellParameters.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.actionButtonShowSpellParameters = e.target.checked;
+        }
+    };
+}
+
+// Complexidade: O(1) - Atualização simples
+function renderGeneralSettings(json) {
+    const options = json?.options || {};
+
+    // Animated Mouse Cursor
+    const animatedMouseCursor = document.getElementById('animatedMouseCursor');
+    animatedMouseCursor.checked = options.mouseAnimatedCursor || false;
+    animatedMouseCursor.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.mouseAnimatedCursor = e.target.checked;
+        }
+    };
+
+    // Ask Before Buying Store Products
+    const askBeforeBuyingStoreProducts = document.getElementById('askBeforeBuyingStoreProducts');
+    askBeforeBuyingStoreProducts.checked = options.storeAskBeforeBuyingProducts || false;
+    askBeforeBuyingStoreProducts.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.storeAskBeforeBuyingProducts = e.target.checked;
+        }
+    };
+
+    // Highlight Mouse Target
+    const highlightMouseTarget = document.getElementById('highlightMouseTarget');
+    highlightMouseTarget.checked = options.gameWindowShowTargetHighlight !== false;
+    highlightMouseTarget.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.gameWindowShowTargetHighlight = e.target.checked;
+        }
+    };
+
+    // Show Cooldown Bar
+    const showCooldownBar = document.getElementById('showCooldownBar');
+    showCooldownBar.checked = options.cooldownBarEnabled || false;
+    showCooldownBar.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.cooldownBarEnabled = e.target.checked;
+        }
+    };
+
+    // Control Scheme
+    const controlScheme = document.getElementById('controlScheme');
+    controlScheme.value = options.controlSchemeIndex !== undefined ? options.controlSchemeIndex.toString() : '0';
+    controlScheme.onchange = (e) => {
+        if (filesData[currentFileIndex]) {
+            if (!filesData[currentFileIndex].data.options) {
+                filesData[currentFileIndex].data.options = {};
+            }
+            filesData[currentFileIndex].data.options.controlSchemeIndex = parseInt(e.target.value);
+        }
+    };
 }
 
 // Complexidade: O(n) - n = número de canais (7)
