@@ -391,7 +391,7 @@ function sortTargettingList() {
     const data = zerobotFilesData[fileIndex];
     if (!data.targeting || !data.targeting.list) return;
 
-    // Ordenar cada profile dentro de targetting.list pelo campo "name"
+    // Ordenar cada list dentro de cada profile pelo campo "name"
     data.targeting.list.forEach(profile => {
         if (Array.isArray(profile)) {
             profile.sort((a, b) => {
@@ -402,7 +402,14 @@ function sortTargettingList() {
         }
     });
 
-    renderTargettingProfiles(data.targeting, fileIndex);
+    // Atualizar UI
+    const fileCount = zerobotFilesData.filter(f => f !== null).length;
+    if (fileCount === 1) {
+        renderTargettingProfiles(data.targeting, fileIndex);
+    } else {
+        renderZerobotDualFiles();
+    }
+    
     showNotification('Targetting list ordenado alfabeticamente!', 'success');
 }
 
@@ -472,19 +479,31 @@ function handleZerobotDrop(e) {
     
     if (!targetList) return;
     
-    const targetFileIndex = parseInt(targetList.dataset.fileIndex !== undefined ? targetList.dataset.fileIndex : 
-                                     (targetList.closest('#zerobotFilePanel2') ? 1 : 0));
+    // Determinar fileIndex do target
+    let targetFileIndex;
+    if (targetList.dataset.fileIndex !== undefined) {
+        targetFileIndex = parseInt(targetList.dataset.fileIndex);
+    } else {
+        const filePanel = targetList.closest('.file-panel');
+        targetFileIndex = filePanel && filePanel.id === 'zerobotFilePanel2' ? 1 : 0;
+    }
+    
     const targetSection = targetList.dataset.section || dragData.section;
     
-    // Se soltou em outro profile, reordenar dentro do mesmo grupo
-    if (targetProfileItem && targetProfileItem.dataset.fileIndex == dragData.fileIndex && 
-        targetProfileItem.dataset.section === dragData.section) {
+    // Se soltou em outro profile do mesmo arquivo e seção, reordenar
+    if (targetProfileItem && parseInt(targetProfileItem.dataset.fileIndex) === dragData.fileIndex && 
+        targetProfileItem.dataset.section === dragData.section && dragData.fileIndex === targetFileIndex) {
         const targetIndex = parseInt(targetProfileItem.dataset.profileIndex);
         reorderZerobotProfile(dragData.fileIndex, dragData.section, dragData.profileIndex, targetIndex);
     } 
-    // Se soltou em lista diferente, copiar profile
+    // Se soltou em lista de arquivo diferente ou seção diferente, copiar profile
     else if (targetFileIndex !== dragData.fileIndex || targetSection !== dragData.section) {
         copyZerobotProfile(dragData.fileIndex, targetFileIndex, dragData.section, dragData.profileIndex);
+    }
+    // Se soltou na mesma lista mas em posição diferente, reordenar
+    else if (targetProfileItem && parseInt(targetProfileItem.dataset.profileIndex) !== dragData.profileIndex) {
+        const targetIndex = parseInt(targetProfileItem.dataset.profileIndex);
+        reorderZerobotProfile(dragData.fileIndex, dragData.section, dragData.profileIndex, targetIndex);
     }
     
     // Limpar classes
