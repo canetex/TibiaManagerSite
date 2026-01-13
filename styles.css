@@ -38,12 +38,56 @@ body {
 /* Header */
 .header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     padding: 30px;
     background: var(--tibia-bg-card);
     border-radius: 10px;
     border: 2px solid var(--tibia-border);
     box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    padding: 15px 30px;
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 8px;
+    color: var(--tibia-text);
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tab-button:hover {
+    border-color: var(--tibia-gold);
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+}
+
+.tab-button.active {
+    background: var(--tibia-gold);
+    color: var(--tibia-dark);
+    border-color: var(--tibia-gold);
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
 }
 
 .title {
@@ -747,6 +791,94 @@ body {
     border: 2px solid var(--tibia-red-dark);
 }
 
+/* Char Configurator */
+.char-configurator-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.instructions-section {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+.instructions-content {
+    margin-top: 20px;
+}
+
+.instruction-step {
+    margin-bottom: 20px;
+}
+
+.step-title {
+    color: var(--tibia-gold);
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.step-list {
+    color: var(--tibia-text);
+    line-height: 1.8;
+    padding-left: 25px;
+}
+
+.step-list li {
+    margin-bottom: 15px;
+}
+
+.step-list strong {
+    color: var(--tibia-gold);
+}
+
+.step-list code {
+    background: var(--tibia-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--tibia-gold);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.char-upload-section,
+.char-download-section {
+    background: var(--tibia-bg-card);
+    border: 2px solid var(--tibia-border);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px var(--tibia-shadow);
+}
+
+.char-upload-container {
+    margin-top: 20px;
+}
+
+.char-upload-box {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.char-download-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.download-info {
+    color: var(--tibia-text);
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 1.2em;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .title {
@@ -767,6 +899,14 @@ body {
 
     .channels-container {
         grid-template-columns: 1fr;
+    }
+
+    .nav-tabs {
+        flex-direction: column;
+    }
+
+    .tab-button {
+        width: 100%;
     }
 
     .notification {

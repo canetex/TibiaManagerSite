@@ -21,11 +21,18 @@ const CHANNELS = {
 let filesData = [null, null];
 let currentFileIndex = 0;
 
+// Estado da aplicação para Char Configurator
+let charFileData = null;
+let defaultItemPrices = null;
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
+    initializeTabs();
     initializeUpload();
     initializeEditor();
     initializeModal();
+    initializeCharConfigurator();
+    loadDefaultItemPrices();
 });
 
 // Complexidade: O(1) - Event listeners simples
@@ -845,4 +852,188 @@ function showNotification(message, type = 'success') {
             notification.remove();
         }, 300);
     }, 3000);
+}
+
+// ==================== TAB NAVIGATION ====================
+
+// Complexidade: O(1) - Event listeners simples
+function initializeTabs() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.dataset.tab;
+
+            // Remove active class de todos
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Adiciona active class ao selecionado
+            button.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
+}
+
+// ==================== CHAR CONFIGURATOR ====================
+
+// Estado da aplicação para Char Configurator
+let charFileData = null;
+let defaultItemPrices = null;
+
+// Complexidade: O(1) - Carregamento de arquivo estático
+async function loadDefaultItemPrices() {
+    try {
+        const response = await fetch('itemPrices/itemprices.json');
+        if (response.ok) {
+            defaultItemPrices = await response.json();
+        } else {
+            console.warn('Arquivo de preços padrão não encontrado');
+        }
+    } catch (error) {
+        console.error('Erro ao carregar preços padrão:', error);
+    }
+}
+
+// Complexidade: O(1) - Event listeners simples
+function initializeCharConfigurator() {
+    const charUploadArea = document.getElementById('charUploadArea');
+    const charFileInput = document.getElementById('charFileInput');
+    const removeCharFileBtn = document.getElementById('removeCharFile');
+    const btnDownloadChar = document.getElementById('btnDownloadChar');
+
+    // Click para upload
+    charUploadArea.addEventListener('click', () => charFileInput.click());
+
+    // Drag and drop
+    charUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        charUploadArea.classList.add('dragover');
+    });
+
+    charUploadArea.addEventListener('dragleave', () => {
+        charUploadArea.classList.remove('dragover');
+    });
+
+    charUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        charUploadArea.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type === 'application/json') {
+            handleCharFileUpload(file);
+        }
+    });
+
+    // File input change
+    charFileInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            handleCharFileUpload(e.target.files[0]);
+            e.target.value = ''; // Reset para permitir selecionar o mesmo arquivo
+        }
+    });
+
+    // Remove button
+    removeCharFileBtn.addEventListener('click', () => {
+        removeCharFile();
+    });
+
+    // Download button
+    btnDownloadChar.addEventListener('click', () => {
+        downloadCharFile();
+    });
+}
+
+// Complexidade: O(n) - n = tamanho do arquivo JSON + número de itens a mesclar
+async function handleCharFileUpload(file) {
+    try {
+        const text = await file.text();
+        const json = JSON.parse(text);
+
+        // Mesclar com os preços padrão
+        const mergedData = mergeItemPrices(json);
+
+        charFileData = {
+            data: mergedData,
+            fileName: file.name
+        };
+
+        updateCharFileUI(file.name);
+        showNotification('Arquivo processado com sucesso!', 'success');
+    } catch (error) {
+        alert('Erro ao processar arquivo JSON: ' + error.message);
+    }
+}
+
+// Complexidade: O(n) - n = número de itens em defaultItemPrices
+function mergeItemPrices(userFile) {
+    if (!defaultItemPrices) {
+        showNotification('Preços padrão não carregados. Usando apenas o arquivo enviado.', 'error');
+        return userFile;
+    }
+
+    const merged = {
+        customSalePrices: { ...userFile.customSalePrices || {} },
+        primaryLootValueSources: { ...userFile.primaryLootValueSources || {} }
+    };
+
+    // Mesclar customSalePrices (substituir/incluir valores do padrão)
+    if (defaultItemPrices.customSalePrices) {
+        Object.assign(merged.customSalePrices, defaultItemPrices.customSalePrices);
+    }
+
+    // Mesclar primaryLootValueSources (substituir/incluir valores do padrão)
+    if (defaultItemPrices.primaryLootValueSources) {
+        Object.assign(merged.primaryLootValueSources, defaultItemPrices.primaryLootValueSources);
+    }
+
+    return merged;
+}
+
+// Complexidade: O(1) - Atualização de UI simples
+function updateCharFileUI(fileName) {
+    const charUploadArea = document.getElementById('charUploadArea');
+    const charFileInfo = document.getElementById('charFileInfo');
+    const charFileName = document.getElementById('charFileName');
+    const charDownloadSection = document.getElementById('charDownloadSection');
+
+    charUploadArea.style.display = 'none';
+    charFileInfo.style.display = 'flex';
+    charFileName.textContent = fileName;
+    charDownloadSection.style.display = 'block';
+}
+
+// Complexidade: O(1) - Atualização de UI simples
+function removeCharFile() {
+    charFileData = null;
+    const charUploadArea = document.getElementById('charUploadArea');
+    const charFileInfo = document.getElementById('charFileInfo');
+    const charDownloadSection = document.getElementById('charDownloadSection');
+    const charFileInput = document.getElementById('charFileInput');
+
+    charUploadArea.style.display = 'block';
+    charFileInfo.style.display = 'none';
+    charDownloadSection.style.display = 'none';
+    charFileInput.value = '';
+}
+
+// Complexidade: O(1) - Download simples
+function downloadCharFile() {
+    if (!charFileData) {
+        showNotification('Nenhum arquivo processado para download', 'error');
+        return;
+    }
+
+    const jsonString = JSON.stringify(charFileData.data, null, 4);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'itemprices.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showNotification('Download iniciado!', 'success');
 }

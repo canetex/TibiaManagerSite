@@ -11,17 +11,29 @@
         <header class="header">
             <h1 class="title">
                 <span class="tibia-icon">⚔️</span>
-                Tibia Client Options Editor
+                Tibia Configuration Editor
             </h1>
             <p class="subtitle">Editor de configurações do cliente Tibia</p>
-            <div class="info-box">
-                <p class="info-text">
-                    📁 Para obter o arquivo, busque na pasta: <strong>{Pasta Tibia}/conf/clientoptions.json</strong>
-                </p>
-            </div>
         </header>
 
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-button active" data-tab="client-configurator">
+                Client Configurator
+            </button>
+            <button class="tab-button" data-tab="char-configurator">
+                Char Configurator
+            </button>
+        </nav>
+
         <main class="main-content">
+            <!-- Client Configurator Tab -->
+            <div class="tab-content active" id="client-configurator">
+                <div class="info-box">
+                    <p class="info-text">
+                        📁 Para obter o arquivo, busque na pasta: <strong>{Pasta Tibia}/conf/clientoptions.json</strong>
+                    </p>
+                </div>
             <!-- Upload Section -->
             <section class="upload-section">
                 <h2 class="section-title">Upload de Arquivos</h2>
@@ -200,6 +212,61 @@
                             <button class="btn btn-success btn-block" id="btnDownload2">💾 Download Arquivo 2</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Char Configurator Tab -->
+            <div class="tab-content" id="char-configurator">
+                <div class="char-configurator-container">
+                    <!-- Instructions Section -->
+                    <section class="instructions-section">
+                        <h2 class="section-title">📖 Instruções</h2>
+                        <div class="instructions-content">
+                            <div class="instruction-step">
+                                <h3 class="step-title">Step 1: Qual arquivo devo editar?</h3>
+                                <ol class="step-list">
+                                    <li>No cliente do Tibia, no personagem escolhido, vá em <strong>Cyclopedia → Items</strong> e configure um preço customizado em qualquer item. Isso garante que o arquivo <code>itemsprices.json</code> associado a este personagem seja o mais recentemente atualizado.</li>
+                                    <li>Abra o diretório de screenshots do Tibia. Você pode fazer isso pelo cliente do Tibia via <strong>Settings → Misc. → Screenshots → Open Screenshot Folder</strong>.</li>
+                                    <li>Suba um nível de diretório e entre no diretório <code>characterdata</code> (no mesmo nível dos diretórios screenshots e minimap).</li>
+                                    <li>Encontre o diretório mais recentemente atualizado (ex: no Windows Explorer, você pode ordenar por "Date modified" em ordem decrescente) e entre nele.</li>
+                                    <li>O arquivo <code>itemsprices.json</code> nesta pasta é o que você quer! Crie um backup e então copie seu conteúdo para esta ferramenta.</li>
+                                    <li>Feche o cliente do Tibia.</li>
+                                    <li>Salve o arquivo de saída.</li>
+                                    <li>Abra o cliente do Tibia novamente e aproveite os destaques dourados nas mensagens de loot para todos os itens que você selecionou!</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Upload Section -->
+                    <section class="char-upload-section">
+                        <h2 class="section-title">Step 2: Upload seu arquivo atual</h2>
+                        <div class="char-upload-container">
+                            <div class="char-upload-box">
+                                <div class="upload-area" id="charUploadArea">
+                                    <div class="upload-icon">📄</div>
+                                    <p class="upload-text">itemprices.json</p>
+                                    <p class="upload-hint">Clique ou arraste o JSON aqui</p>
+                                    <input type="file" id="charFileInput" accept=".json" class="file-input">
+                                </div>
+                                <div class="file-info" id="charFileInfo" style="display: none;">
+                                    <span class="file-name" id="charFileName"></span>
+                                    <button class="btn-remove" id="removeCharFile">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Download Section -->
+                    <section class="char-download-section" id="charDownloadSection" style="display: none;">
+                        <h2 class="section-title">Step 3: Download do arquivo atualizado</h2>
+                        <div class="char-download-container">
+                            <p class="download-info">Seu arquivo foi processado e mesclado com os preços customizados!</p>
+                            <button class="btn btn-success btn-large" id="btnDownloadChar">
+                                💾 Download itemprices.json Atualizado
+                            </button>
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>
