@@ -866,12 +866,16 @@ function initializeTabs() {
         return;
     }
 
-    tabButtons.forEach(button => {
+    tabButtons.forEach((button, index) => {
+        const targetTab = button.dataset.tab;
+        console.log(`Tab ${index}: ${button.textContent.trim()}, data-tab: ${targetTab}`);
+        
         button.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             
             const targetTab = button.dataset.tab;
+            console.log(`Clicou na tab: ${button.textContent.trim()}, targetTab: ${targetTab}`);
             
             if (!targetTab) {
                 console.error('Tab sem data-tab attribute');
@@ -888,8 +892,12 @@ function initializeTabs() {
             const targetElement = document.getElementById(targetTab);
             if (targetElement) {
                 targetElement.classList.add('active');
+                console.log(`Tab "${targetTab}" ativada com sucesso`);
             } else {
                 console.error(`Elemento com ID "${targetTab}" não encontrado`);
+                // Lista todos os elementos com class tab-content para debug
+                const allTabs = document.querySelectorAll('.tab-content');
+                console.log('Tabs disponíveis:', Array.from(allTabs).map(t => t.id));
             }
         });
     });
