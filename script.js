@@ -885,9 +885,18 @@ let defaultItemPrices = null;
 // Complexidade: O(1) - Carregamento de arquivo estático
 async function loadDefaultItemPrices() {
     try {
-        const response = await fetch('itemPrices/itemprices.json');
+        // Tenta carregar de diferentes caminhos possíveis
+        let response = await fetch('itemPrices/itemprices.json');
+        if (!response.ok) {
+            response = await fetch('./itemPrices/itemprices.json');
+        }
+        if (!response.ok) {
+            response = await fetch('itemprices.json');
+        }
+        
         if (response.ok) {
             defaultItemPrices = await response.json();
+            console.log('Preços padrão carregados com sucesso');
         } else {
             console.warn('Arquivo de preços padrão não encontrado');
         }
