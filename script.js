@@ -948,9 +948,13 @@ function initializeCharConfigurator() {
     });
 
     // Download button
-    btnDownloadChar.addEventListener('click', () => {
-        downloadCharFile();
-    });
+    if (btnDownloadChar) {
+        btnDownloadChar.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            downloadCharFile();
+        });
+    }
 }
 
 // Complexidade: O(n) - n = tamanho do arquivo JSON + número de itens a mesclar
