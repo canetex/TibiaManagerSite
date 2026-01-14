@@ -876,7 +876,7 @@ function pasteZerobotProfileContent(profileIndex, sectionName, fileIndex) {
     showNotification(`Profile "${profileName}" subscrevido com sucesso!`, 'success');
 }
 
-// Complexidade: O(n) - Excluir profile
+// Complexidade: O(n) - Excluir profile (mantém estrutura, apenas limpa conteúdo)
 function deleteZerobotProfile(profileIndex, sectionName, fileIndex) {
     const data = zerobotFilesData[fileIndex];
     if (!data || !data[sectionName]) return;
@@ -896,21 +896,20 @@ function deleteZerobotProfile(profileIndex, sectionName, fileIndex) {
     const profileName = profileNames[profileIndex] || `Profile ${profileIndex + 1}`;
     
     // Confirmar exclusão
-    if (!confirm(`Deseja realmente excluir o profile "${profileName}"?\n\nEsta ação não pode ser desfeita.`)) {
+    if (!confirm(`Deseja realmente excluir o conteúdo do profile "${profileName}"?\n\nA estrutura do profile será mantida, apenas o conteúdo será limpo.`)) {
         return;
     }
     
-    // Verificar se é o último profile (mínimo 1 profile)
-    if (list.length <= 1) {
-        showNotification('Não é possível excluir o último profile!', 'error');
-        return;
+    // Limpar conteúdo do profile mantendo a estrutura
+    // Limpar a lista (array vazio)
+    if (Array.isArray(list[profileIndex])) {
+        list[profileIndex] = [];
+    } else {
+        list[profileIndex] = [];
     }
     
-    // Remover profile mantendo sincronização
-    list.splice(profileIndex, 1);
-    profileKeys.splice(profileIndex, 1);
-    profileModifiers.splice(profileIndex, 1);
-    profileNames.splice(profileIndex, 1);
+    // Manter profileKeys, profileModifiers e profileNames (estrutura)
+    // Não remover elementos, apenas manter os valores existentes
     
     // Atualizar UI
     const fileCount = zerobotFilesData.filter(f => f !== null).length;
@@ -928,5 +927,5 @@ function deleteZerobotProfile(profileIndex, sectionName, fileIndex) {
         renderZerobotDualFiles();
     }
     
-    showNotification(`Profile "${profileName}" excluído com sucesso!`, 'success');
+    showNotification(`Conteúdo do profile "${profileName}" excluído com sucesso!`, 'success');
 }
