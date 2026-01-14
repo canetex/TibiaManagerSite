@@ -452,6 +452,78 @@
         </div>
     </div>
 
+    <!-- Modal para atribuir valores a todos os monstros -->
+    <div class="modal" id="zerobotAssignValuesModal">
+        <div class="modal-content modal-medium">
+            <span class="modal-close" id="zerobotAssignValuesModalClose">&times;</span>
+            <h3 class="modal-title" id="zerobotAssignValuesModalTitle">Atribuir a todos os monstros deste perfil</h3>
+            <div class="modal-body">
+                <div class="assign-values-container">
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignChaseMode" class="checkbox-input">
+                            <span class="checkbox-text">ChaseMode</span>
+                        </label>
+                        <input type="number" id="chaseModeValue" class="form-input" value="4" min="0" max="4" disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignCount" class="checkbox-input">
+                            <span class="checkbox-text">Count</span>
+                        </label>
+                        <input type="number" id="countValue" class="form-input" value="1" min="0" disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignDistance" class="checkbox-input">
+                            <span class="checkbox-text">Distance</span>
+                        </label>
+                        <input type="number" id="distanceValue" class="form-input" value="0" min="0" disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignEnabled" class="checkbox-input">
+                            <span class="checkbox-text">Enabled</span>
+                        </label>
+                        <input type="checkbox" id="enabledValue" class="checkbox-input" checked disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignMaxHP" class="checkbox-input">
+                            <span class="checkbox-text">MaxHP</span>
+                        </label>
+                        <input type="number" id="maxHPValue" class="form-input" value="100" min="0" max="100" disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignMinHP" class="checkbox-input">
+                            <span class="checkbox-text">MinHP</span>
+                        </label>
+                        <input type="number" id="minHPValue" class="form-input" value="0" min="0" max="100" disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignPriority" class="checkbox-input">
+                            <span class="checkbox-text">Priority</span>
+                        </label>
+                        <input type="number" id="priorityValue" class="form-input" value="0" min="0" disabled>
+                    </div>
+                    <div class="assign-value-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignProximity" class="checkbox-input">
+                            <span class="checkbox-text">Proximity</span>
+                        </label>
+                        <input type="number" id="proximityValue" class="form-input" value="6" min="0" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="btnConfirmAssignValues">Confirmar</button>
+                <button class="btn btn-secondary" id="btnCancelAssignValues">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para criar/copiar perfil -->
     <div class="modal" id="profileModal">
         <div class="modal-content">

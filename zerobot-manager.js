@@ -9,6 +9,7 @@ function initializeZerobotManager() {
     setupZerobotDownload();
     setupZerobotSorting();
     setupZerobotDragAndDrop();
+    setupAssignValuesModal();
 }
 
 // Complexidade: O(1) - Setup de event listeners
@@ -186,6 +187,7 @@ function renderTargettingProfiles(targeting, fileIndex) {
                     </div>
                     <div class="profile-buttons-row profile-buttons-row-medium">
                         <button class="btn-icon btn-icon-medium" title="Renomear" onclick="renameZerobotProfile(${i}, 'targeting', ${fileIndex})">✏️</button>
+                        <button class="btn-icon btn-icon-medium" title="Atribuir a todos os monstros" onclick="openAssignValuesModal(${i}, ${fileIndex})">⚙️</button>
                         <button class="btn-icon btn-icon-medium btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, 'targeting', ${fileIndex})">🗑️</button>
                     </div>
                     <div class="profile-buttons-row">
@@ -318,6 +320,7 @@ function renderDualProfileList(section, sectionName, container, fileIndex, listK
                     ${sectionName === 'targeting' ? `<div class="profile-buttons-row profile-buttons-row-large"><button class="btn-icon btn-icon-large" title="Ordenar Alfabeticamente" onclick="sortTargettingProfileList(${i}, ${fileIndex})">🔤</button></div>` : ''}
                     <div class="profile-buttons-row profile-buttons-row-medium">
                         <button class="btn-icon btn-icon-medium" title="Renomear" onclick="renameZerobotProfile(${i}, '${sectionName}', ${fileIndex})">✏️</button>
+                        ${sectionName === 'targeting' ? `<button class="btn-icon btn-icon-medium" title="Atribuir a todos os monstros" onclick="openAssignValuesModal(${i}, ${fileIndex})">⚙️</button>` : ''}
                         <button class="btn-icon btn-icon-medium btn-danger" title="Excluir Profile" onclick="deleteZerobotProfile(${i}, '${sectionName}', ${fileIndex})">🗑️</button>
                     </div>
                     <div class="profile-buttons-row">

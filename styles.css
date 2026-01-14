@@ -1164,6 +1164,44 @@ body {
     transform: translateY(-2px);
 }
 
+.modal-medium {
+    max-width: 600px;
+    width: 90%;
+}
+
+.assign-values-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.assign-value-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background: var(--tibia-bg-dark);
+    border-radius: 6px;
+    border: 1px solid var(--tibia-border);
+}
+
+.assign-value-item label {
+    min-width: 120px;
+    margin: 0;
+}
+
+.assign-value-item input[type="number"],
+.assign-value-item input[type="checkbox"] {
+    flex: 1;
+    max-width: 150px;
+}
+
+.assign-value-item input[type="number"]:disabled,
+.assign-value-item input[type="checkbox"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .profile-actions-dual {
     display: flex;
     gap: 10px;
