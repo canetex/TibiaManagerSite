@@ -932,3 +932,193 @@ function deleteZerobotProfile(profileIndex, sectionName, fileIndex) {
     
     showNotification(`Conteúdo do profile "${profileName}" excluído com sucesso!`, 'success');
 }
+
+// Variável global para armazenar dados do modal de atribuição
+let assignValuesData = {
+    profileIndex: null,
+    fileIndex: null
+};
+
+// Complexidade: O(1) - Setup do modal de atribuição de valores
+function setupAssignValuesModal() {
+    const modal = document.getElementById('zerobotAssignValuesModal');
+    const modalClose = document.getElementById('zerobotAssignValuesModalClose');
+    const btnConfirm = document.getElementById('btnConfirmAssignValues');
+    const btnCancel = document.getElementById('btnCancelAssignValues');
+    
+    if (!modal) return;
+    
+    // Checkboxes para habilitar/desabilitar campos
+    const checkboxes = ['assignChaseMode', 'assignCount', 'assignDistance', 'assignEnabled', 'assignMaxHP', 'assignMinHP', 'assignPriority', 'assignProximity'];
+    checkboxes.forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) {
+            checkbox.addEventListener('change', (e) => {
+                const fieldId = id.replace('assign', '').charAt(0).toLowerCase() + id.replace('assign', '').slice(1);
+                const inputId = fieldId === 'chaseMode' ? 'chaseModeValue' :
+                               fieldId === 'count' ? 'countValue' :
+                               fieldId === 'distance' ? 'distanceValue' :
+                               fieldId === 'enabled' ? 'enabledValue' :
+                               fieldId === 'maxHP' ? 'maxHPValue' :
+                               fieldId === 'minHP' ? 'minHPValue' :
+                               fieldId === 'priority' ? 'priorityValue' :
+                               'proximityValue';
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.disabled = !e.target.checked;
+                }
+            });
+        }
+    });
+    
+    if (modalClose) {
+        modalClose.onclick = () => {
+            modal.classList.remove('active');
+        };
+    }
+    
+    if (btnCancel) {
+        btnCancel.onclick = () => {
+            modal.classList.remove('active');
+        };
+    }
+    
+    if (btnConfirm) {
+        btnConfirm.onclick = () => {
+            applyAssignValues();
+        };
+    }
+    
+    // Fechar ao clicar fora do modal
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+}
+
+// Complexidade: O(1) - Abrir modal de atribuição de valores
+function openAssignValuesModal(profileIndex, fileIndex) {
+    const modal = document.getElementById('zerobotAssignValuesModal');
+    const modalTitle = document.getElementById('zerobotAssignValuesModalTitle');
+    
+    if (!modal) return;
+    
+    const data = zerobotFilesData[fileIndex];
+    if (!data || !data.targeting || !data.targeting.profileNames) return;
+    
+    const profileName = data.targeting.profileNames[profileIndex] || `Profile ${profileIndex + 1}`;
+    modalTitle.textContent = `Atribuir a todos os monstros deste perfil - ${profileName}`;
+    
+    // Armazenar dados
+    assignValuesData.profileIndex = profileIndex;
+    assignValuesData.fileIndex = fileIndex;
+    
+    // Resetar checkboxes e valores
+    const checkboxes = ['assignChaseMode', 'assignCount', 'assignDistance', 'assignEnabled', 'assignMaxHP', 'assignMinHP', 'assignPriority', 'assignProximity'];
+    checkboxes.forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) {
+            checkbox.checked = false;
+            const fieldId = id.replace('assign', '').charAt(0).toLowerCase() + id.replace('assign', '').slice(1);
+            const inputId = fieldId === 'chaseMode' ? 'chaseModeValue' :
+                           fieldId === 'count' ? 'countValue' :
+                           fieldId === 'distance' ? 'distanceValue' :
+                           fieldId === 'enabled' ? 'enabledValue' :
+                           fieldId === 'maxHP' ? 'maxHPValue' :
+                           fieldId === 'minHP' ? 'minHPValue' :
+                           fieldId === 'priority' ? 'priorityValue' :
+                           'proximityValue';
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.disabled = true;
+                // Resetar valores padrão
+                if (inputId === 'chaseModeValue') input.value = 4;
+                else if (inputId === 'countValue') input.value = 1;
+                else if (inputId === 'distanceValue') input.value = 0;
+                else if (inputId === 'enabledValue') input.checked = true;
+                else if (inputId === 'maxHPValue') input.value = 100;
+                else if (inputId === 'minHPValue') input.value = 0;
+                else if (inputId === 'priorityValue') input.value = 0;
+                else if (inputId === 'proximityValue') input.value = 6;
+            }
+        }
+    });
+    
+    modal.classList.add('active');
+}
+
+// Complexidade: O(n) - Aplicar valores atribuídos
+function applyAssignValues() {
+    if (assignValuesData.profileIndex === null || assignValuesData.fileIndex === null) return;
+    
+    const data = zerobotFilesData[assignValuesData.fileIndex];
+    if (!data || !data.targeting || !data.targeting.list) return;
+    
+    const profile = data.targeting.list[assignValuesData.profileIndex];
+    if (!Array.isArray(profile)) return;
+    
+    // Obter valores dos campos marcados
+    const values = {};
+    
+    if (document.getElementById('assignChaseMode')?.checked) {
+        values.chaseMode = parseInt(document.getElementById('chaseModeValue').value) || 4;
+    }
+    if (document.getElementById('assignCount')?.checked) {
+        values.count = parseInt(document.getElementById('countValue').value) || 1;
+    }
+    if (document.getElementById('assignDistance')?.checked) {
+        values.distance = parseInt(document.getElementById('distanceValue').value) || 0;
+    }
+    if (document.getElementById('assignEnabled')?.checked) {
+        values.enabled = document.getElementById('enabledValue').checked;
+    }
+    if (document.getElementById('assignMaxHP')?.checked) {
+        values.maxHp = parseInt(document.getElementById('maxHPValue').value) || 100;
+    }
+    if (document.getElementById('assignMinHP')?.checked) {
+        values.minHp = parseInt(document.getElementById('minHPValue').value) || 0;
+    }
+    if (document.getElementById('assignPriority')?.checked) {
+        values.priority = parseInt(document.getElementById('priorityValue').value) || 0;
+    }
+    if (document.getElementById('assignProximity')?.checked) {
+        values.proximity = parseInt(document.getElementById('proximityValue').value) || 6;
+    }
+    
+    if (Object.keys(values).length === 0) {
+        showNotification('Selecione pelo menos um campo para atribuir!', 'error');
+        return;
+    }
+    
+    // Aplicar valores a todos os monstros do profile
+    let updatedCount = 0;
+    profile.forEach(monster => {
+        if (monster && typeof monster === 'object') {
+            Object.keys(values).forEach(key => {
+                // Converter camelCase para o formato do JSON (maxHp -> maxHp, minHp -> minHp)
+                const jsonKey = key === 'maxHp' ? 'maxHp' : 
+                               key === 'minHp' ? 'minHp' : 
+                               key;
+                monster[jsonKey] = values[key];
+            });
+            updatedCount++;
+        }
+    });
+    
+    // Fechar modal
+    const modal = document.getElementById('zerobotAssignValuesModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    // Atualizar UI
+    const fileCount = zerobotFilesData.filter(f => f !== null).length;
+    if (fileCount === 1) {
+        renderTargettingProfiles(data.targeting, assignValuesData.fileIndex);
+    } else {
+        renderZerobotDualFiles();
+    }
+    
+    showNotification(`${updatedCount} monstro(s) atualizado(s) com sucesso!`, 'success');
+}
