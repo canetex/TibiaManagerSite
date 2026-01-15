@@ -1033,14 +1033,18 @@ function openAssignValuesModal(profileIndex, fileIndex) {
             if (input) {
                 input.disabled = true;
                 // Resetar valores padrão
-                if (inputId === 'chaseModeValue') input.value = 4;
-                else if (inputId === 'countValue') input.value = 1;
+                if (inputId === 'chaseModeValue') {
+                    input.value = 4;
+                    input.selectedIndex = 4; // 4 - Do Nothing
+                } else if (inputId === 'countValue') input.value = 1;
                 else if (inputId === 'distanceValue') input.value = 0;
                 else if (inputId === 'enabledValue') input.checked = true;
                 else if (inputId === 'maxHPValue') input.value = 100;
                 else if (inputId === 'minHPValue') input.value = 0;
-                else if (inputId === 'priorityValue') input.value = 0;
-                else if (inputId === 'proximityValue') input.value = 6;
+                else if (inputId === 'priorityValue') {
+                    input.value = 0;
+                    input.selectedIndex = 0; // 0 - Low
+                } else if (inputId === 'proximityValue') input.value = 6;
             }
         }
     });
@@ -1062,7 +1066,8 @@ function applyAssignValues() {
     const values = {};
     
     if (document.getElementById('assignChaseMode')?.checked) {
-        values.chaseMode = parseInt(document.getElementById('chaseModeValue').value) || 4;
+        const chaseModeSelect = document.getElementById('chaseModeValue');
+        values.chaseMode = parseInt(chaseModeSelect.value) || 4;
     }
     if (document.getElementById('assignCount')?.checked) {
         values.count = parseInt(document.getElementById('countValue').value) || 1;
@@ -1080,7 +1085,8 @@ function applyAssignValues() {
         values.minHp = parseInt(document.getElementById('minHPValue').value) || 0;
     }
     if (document.getElementById('assignPriority')?.checked) {
-        values.priority = parseInt(document.getElementById('priorityValue').value) || 0;
+        const prioritySelect = document.getElementById('priorityValue');
+        values.priority = parseInt(prioritySelect.value) || 0;
     }
     if (document.getElementById('assignProximity')?.checked) {
         values.proximity = parseInt(document.getElementById('proximityValue').value) || 6;

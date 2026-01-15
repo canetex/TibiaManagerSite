@@ -1197,9 +1197,26 @@ body {
 }
 
 .assign-value-item input[type="number"]:disabled,
-.assign-value-item input[type="checkbox"]:disabled {
+.assign-value-item input[type="checkbox"]:disabled,
+.assign-value-item select:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.assign-value-item select {
+    flex: 1;
+    max-width: 200px;
+    padding: 8px 12px;
+    background: var(--tibia-bg-dark);
+    border: 1px solid var(--tibia-border);
+    border-radius: 4px;
+    color: var(--tibia-text);
+    font-size: 0.95em;
+}
+
+.assign-value-item select:focus {
+    outline: none;
+    border-color: var(--tibia-gold);
 }
 
 .profile-actions-dual {

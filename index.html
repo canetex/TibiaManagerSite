@@ -464,7 +464,13 @@
                             <input type="checkbox" id="assignChaseMode" class="checkbox-input">
                             <span class="checkbox-text">ChaseMode</span>
                         </label>
-                        <input type="number" id="chaseModeValue" class="form-input" value="4" min="0" max="4" disabled>
+                        <select id="chaseModeValue" class="form-select" disabled>
+                            <option value="0">0 - Stand</option>
+                            <option value="1">1 - Chase</option>
+                            <option value="2">2 - Distance</option>
+                            <option value="3">3 - Diagonal</option>
+                            <option value="4" selected>4 - Do Nothing</option>
+                        </select>
                     </div>
                     <div class="assign-value-item">
                         <label class="checkbox-label">
@@ -506,7 +512,12 @@
                             <input type="checkbox" id="assignPriority" class="checkbox-input">
                             <span class="checkbox-text">Priority</span>
                         </label>
-                        <input type="number" id="priorityValue" class="form-input" value="0" min="0" disabled>
+                        <select id="priorityValue" class="form-select" disabled>
+                            <option value="0" selected>0 - Low</option>
+                            <option value="1">1 - Medium</option>
+                            <option value="2">2 - High</option>
+                            <option value="3">3 - If Stuck</option>
+                        </select>
                     </div>
                     <div class="assign-value-item">
                         <label class="checkbox-label">
