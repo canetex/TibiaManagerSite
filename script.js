@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCharConfigurator();
     loadDefaultItemPrices();
     initializeZerobotManager();
+    initializeCavebotEditor();
 });
 
 // Complexidade: O(1) - Event listeners simples

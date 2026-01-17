@@ -1219,6 +1219,59 @@ body {
     border-color: var(--tibia-gold);
 }
 
+/* Cavebot Editor Styles */
+.cavebot-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cavebot-info {
+    background: var(--tibia-bg-dark);
+    border: 1px solid var(--tibia-border);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.cavebot-info p {
+    margin: 0;
+    color: var(--tibia-text);
+    font-size: 1em;
+}
+
+.cavebot-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.cavebot-actions .btn {
+    flex: 1;
+    min-width: 200px;
+}
+
+#cavebotFileInput {
+    display: none;
+}
+
+#cavebotUploadArea {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#cavebotUploadArea:hover {
+    background: var(--tibia-bg-hover);
+    border-color: var(--tibia-gold);
+}
+
+#cavebotUploadArea.drag-over {
+    background: var(--tibia-bg-hover);
+    border-color: var(--tibia-gold);
+    transform: scale(1.02);
+}
+
 .profile-actions-dual {
     display: flex;
     gap: 10px;

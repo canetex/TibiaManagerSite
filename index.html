@@ -27,6 +27,9 @@
             <button class="tab-button" data-tab="zerobot-manager">
                 ZeroBot Manager
             </button>
+            <button class="tab-button" data-tab="cavebot-editor">
+                Zerobot - Cavebot Editor
+            </button>
         </nav>
 
         <main class="main-content">
@@ -275,6 +278,56 @@
                             </button>
                         </div>
                     </section>
+                </div>
+            </div>
+
+            <!-- Cavebot Editor Tab -->
+            <div class="tab-content" id="cavebot-editor">
+                <div class="cavebot-container">
+                    <div class="info-box">
+                        <p class="info-text">
+                            📁 Faça upload de um arquivo <code>.cb</code> do ZeroBot Cavebot para editar waypoints.
+                        </p>
+                    </div>
+
+                    <!-- Upload Section -->
+                    <section class="upload-section">
+                        <h2 class="section-title">Upload de Arquivo</h2>
+                        <div class="upload-container">
+                            <div class="upload-box" id="cavebotUploadBox">
+                                <div class="upload-area" id="cavebotUploadArea">
+                                    <div class="upload-icon">📄</div>
+                                    <p class="upload-text">Arquivo .cb</p>
+                                    <p class="upload-hint">Clique ou arraste o arquivo aqui</p>
+                                    <input type="file" id="cavebotFileInput" accept=".cb,.json" class="file-input">
+                                </div>
+                                <div class="file-info" id="cavebotFileInfo" style="display: none;">
+                                    <span class="file-name" id="cavebotFileName"></span>
+                                    <button class="btn-remove" id="removeCavebotFile">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Editor Section -->
+                    <div class="editor-container" id="cavebotEditorContainer" style="display: none;">
+                        <section class="editor-section">
+                            <h2 class="section-title">Edição de Waypoints</h2>
+                            <div class="cavebot-info">
+                                <p>Total de waypoints: <strong id="waypointCount">0</strong></p>
+                            </div>
+                            <div class="cavebot-actions">
+                                <button class="btn btn-primary" id="btnInvertOrder">🔄 Inverter Ordem</button>
+                                <button class="btn btn-primary" id="btnAddPause">⏸️ Adicionar Pausas</button>
+                                <button class="btn btn-primary" id="btnAddScript">📜 Adicionar Scripts</button>
+                            </div>
+                        </section>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-success" id="btnDownloadCavebot">💾 Download Arquivo</button>
+                            <button class="btn btn-danger" id="btnResetCavebot">🔄 Resetar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
