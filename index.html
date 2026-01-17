@@ -612,7 +612,52 @@
         </div>
     </div>
 
+    <!-- Modal para adicionar pausas -->
+    <div class="modal" id="cavebotPauseModal">
+        <div class="modal-content modal-medium">
+            <span class="modal-close" id="cavebotPauseModalClose">&times;</span>
+            <h3 class="modal-title">Adicionar Pausas</h3>
+            <div class="modal-body">
+                <label class="form-label">
+                    A cada quantos waypoints adicionar pausa:
+                    <input type="number" id="pauseInterval" class="form-input" value="10" min="1">
+                </label>
+                <label class="form-label">
+                    Delay (ms):
+                    <input type="number" id="pauseDelay" class="form-input" value="1000" min="0">
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="btnConfirmPause">Confirmar</button>
+                <button class="btn btn-secondary" id="btnCancelPause">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar scripts -->
+    <div class="modal" id="cavebotScriptModal">
+        <div class="modal-content modal-medium">
+            <span class="modal-close" id="cavebotScriptModalClose">&times;</span>
+            <h3 class="modal-title">Adicionar Scripts</h3>
+            <div class="modal-body">
+                <label class="form-label">
+                    Script a ser adicionado:
+                    <textarea id="scriptContent" class="form-input" rows="5" placeholder="Ex: wait(1000)"></textarea>
+                </label>
+                <label class="form-label">
+                    A cada quantos waypoints adicionar script:
+                    <input type="number" id="scriptInterval" class="form-input" value="10" min="1">
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="btnConfirmScript">Confirmar</button>
+                <button class="btn btn-secondary" id="btnCancelScript">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script src="zerobot-manager.js"></script>
+    <script src="cavebot-editor.js"></script>
 </body>
 </html>
